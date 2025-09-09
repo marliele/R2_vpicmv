@@ -1,5 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include "form.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -19,6 +20,12 @@ MainWindow::MainWindow(QWidget *parent) :
     mainlayout -> addWidget(historyView);
     historyWidget->setLayout(mainlayout);
     //хуй
+    QSplitter *mainSplitter = new QSplitter(Qt::Horizontal);
+    mainSplitter->addWidget(ui->centralWidget);
+    ui->centralWidget->setMinimumWidth(300);
+    mainSplitter->addWidget(historyWidget);
+    mainSplitter->setStretchFactor(0,1);
+    setCentralWidget(mainSplitter);
     //Set up empty display panel
     ui->displayPanel->clear();
 
@@ -34,9 +41,14 @@ MainWindow::MainWindow(QWidget *parent) :
                              this, SLOT(actionGroup_clicked(QAbstractButton*)));
 
     //Set window fix width and height
-    this->setFixedSize(QSize(306, 319));
-    connect(hideHistoryButton, &QPushButton::clicked, this, &MainWindow::hide_history);
-    connect(clearHistoryButton, &QPushButton::clicked, this, &MainWindow::clean_history);
+    this->setFixedSize(QSize(500, 500));
+
+    connect(ui->hide, &QAction::triggered, this, &MainWindow::onHideHistory);
+    connect(ui->show, &QAction::triggered, this, &MainWindow::onShowHistory);
+    connect(ui->save, &QAction::triggered, this, &MainWindow::onSaveAction);
+    connect(ui->about, &QAction::triggered, this, &MainWindow::onAbout);
+    connect(hideHistoryButton, &QPushButton::clicked, this, &MainWindow::onHideHistory);
+    connect(clearHistoryButton, &QPushButton::clicked, this, &MainWindow::onClearHistory);
     connect(historyView, &QListWidget::itemClicked, this, &MainWindow::onHistoryItemClicked);
 }
 
@@ -203,6 +215,36 @@ void MainWindow::on_actionSign_clicked()
     //Set number back to display
     ui->displayPanel->setText(displayLabel);
 }
+void MainWindow::onSaveAction() {
+    QString currentValue = ui->displayPanel->text();
+
+    if(currentValue.isEmpty()) {
+        ui->statusBar->showMessage("Значение пустое не добавлено в историю", 3000);
+        return;
+    }
+
+    historyList.append(currentValue);
+    ui->statusBar->showMessage("Значение " + currentValue + " добавлено в историю", 3000);
+
+    // таймер для автоматического скрытия сообщения
+    statusBarTimer = new QTimer(this);
+    statusBarTimer->setSingleShot(true);
+    connect(statusBarTimer, &QTimer::timeout, this, &MainWindow::clearStatusBarMessage);
+    statusBarTimer->start(3000);
+    updateHistoryList();
+}
+
+void MainWindow::clearStatusBarMessage() {
+    ui->statusBar->clearMessage();
+}
+
+void MainWindow::updateHistoryList() {
+    historyView->clear();
+    for (const QString& item : qAsConst(historyList)) {
+        historyView->addItem(item);
+    }
+}
+
 
 //==================================================================================
 //Helper functions
@@ -237,13 +279,20 @@ void MainWindow::calculate_result() {
      ui->displayPanel->setText(displayLabel);
 }
 
-void MainWindow::hide_history(){
+void MainWindow::onHideHistory(){
     if(!historyWidget->isVisible()) return;
     resize(width() - historyWidget->width(), height());
     historyWidget ->hide();
+    this->setFixedSize(QSize(350,350));
 }
 
-void MainWindow::clean_history(){
+void MainWindow::onShowHistory(){
+    if(historyWidget->isVisible()) return;
+    historyWidget ->show();
+    this->setFixedSize(QSize(500,500));
+}
+
+void MainWindow::onClearHistory(){
     historyList.clear();
     historyView->clear();
     ui->statusBar->showMessage("История очищена",3000);
@@ -252,6 +301,11 @@ void MainWindow::clean_history(){
 void MainWindow::onHistoryItemClicked(QListWidgetItem *item){
     QString value = item->text();
     ui->displayPanel->setText(value);
+}
+
+void MainWindow::onAbout(){
+    Form *info = new Form();
+    info->show();
 }
 
 //connect(hideHistoryButton, &QPushButton::clicked, this, &MainWindow::hide_history);
@@ -322,6 +376,18 @@ void MainWindow::keyPressEvent(QKeyEvent *e) {
         //Percentage
         case Qt::Key_Percent:
             on_actionPercent_clicked();
+            break;
+        case Qt::Key_F1:
+            onSaveAction();
+            break;
+        case Qt::Key_F2:
+            onShowHistory();
+            break;
+        case Qt::Key_F3:
+            onHideHistory();
+            break;
+        case Qt::Key_F4:
+            onAbout();
             break;
     }
 }
