@@ -10,6 +10,8 @@
 #include <QVBoxLayout>
 #include <QSplitter>
 #include <QTimer>
+#include <QFile>
+#include <QTextStream>
 
 namespace Ui {
 class MainWindow;
@@ -28,10 +30,12 @@ private slots:
     void numberGroup_clicked(QAbstractButton*);
     void actionGroup_clicked(QAbstractButton*);
 
+    void saveHistoryFile();
     void onSaveAction();
     void onShowHistory();
     void onHideHistory();
     void onClearHistory();
+    void loadHistoryFromFile();
     void onAbout();
     void onHistoryItemClicked(QListWidgetItem*);
     void clearStatusBarMessage();

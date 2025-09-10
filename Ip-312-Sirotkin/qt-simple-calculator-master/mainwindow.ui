@@ -9,7 +9,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>369</width>
+    <width>340</width>
     <height>319</height>
    </rect>
   </property>
@@ -369,7 +369,7 @@ color: #ffffff;</string>
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>369</width>
+     <width>340</width>
      <height>26</height>
     </rect>
    </property>
@@ -379,18 +379,21 @@ color: #ffffff;</string>
     </property>
     <addaction name="save"/>
    </widget>
-   <widget class="QMenu" name="history">
-    <property name="title">
-     <string>История</string>
-    </property>
-    <addaction name="show"/>
-    <addaction name="hide"/>
-   </widget>
    <widget class="QMenu" name="info">
     <property name="title">
      <string>Справка</string>
     </property>
     <addaction name="about"/>
+   </widget>
+   <widget class="QMenu" name="history">
+    <property name="tearOffEnabled">
+     <bool>false</bool>
+    </property>
+    <property name="title">
+     <string>История</string>
+    </property>
+    <addaction name="show"/>
+    <addaction name="hide"/>
    </widget>
    <addaction name="menu"/>
    <addaction name="history"/>
@@ -398,22 +401,22 @@ color: #ffffff;</string>
   </widget>
   <action name="show">
    <property name="text">
-    <string>Показать</string>
+    <string>Показать (F2)</string>
    </property>
   </action>
   <action name="hide">
    <property name="text">
-    <string>Скрыть</string>
+    <string>Скрыть (F3)</string>
    </property>
   </action>
   <action name="save">
    <property name="text">
-    <string>Сохранить</string>
+    <string>Сохранить (F1)</string>
    </property>
   </action>
   <action name="about">
    <property name="text">
-    <string>О приложении</string>
+    <string>О приложении (F4)</string>
    </property>
   </action>
  </widget>
@@ -421,7 +424,7 @@ color: #ffffff;</string>
  <resources/>
  <connections/>
  <buttongroups>
-  <buttongroup name="actionGroup"/>
   <buttongroup name="numberGroup"/>
+  <buttongroup name="actionGroup"/>
  </buttongroups>
 </ui>

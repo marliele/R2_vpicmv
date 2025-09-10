@@ -7,7 +7,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    //хуй
+
     historyWidget = new QWidget(this);
     historyWidget ->setWindowTitle("История");
     historyWidget ->resize(200,400);
@@ -19,7 +19,7 @@ MainWindow::MainWindow(QWidget *parent) :
     mainlayout -> addWidget(clearHistoryButton);
     mainlayout -> addWidget(historyView);
     historyWidget->setLayout(mainlayout);
-    //хуй
+
     QSplitter *mainSplitter = new QSplitter(Qt::Horizontal);
     mainSplitter->addWidget(ui->centralWidget);
     ui->centralWidget->setMinimumWidth(300);
@@ -50,10 +50,12 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(hideHistoryButton, &QPushButton::clicked, this, &MainWindow::onHideHistory);
     connect(clearHistoryButton, &QPushButton::clicked, this, &MainWindow::onClearHistory);
     connect(historyView, &QListWidget::itemClicked, this, &MainWindow::onHistoryItemClicked);
+    loadHistoryFromFile();
 }
 
 MainWindow::~MainWindow()
 {
+    saveHistoryFile();
     delete ui;
 }
 
@@ -61,6 +63,32 @@ MainWindow::~MainWindow()
 //Slot functions
 //==================================================================================
 // Called whenever a number button is clicked
+void MainWindow::loadHistoryFromFile(){
+    QFile file("history.txt");
+    if (file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+            QTextStream in(&file);
+            while (!in.atEnd()) {
+                QString line = in.readLine().trimmed();
+                if (!line.isEmpty()) {
+                    historyList.append(line);
+                }
+            }
+            file.close();
+            updateHistoryList();
+        }
+}
+
+void MainWindow::saveHistoryFile(){
+    QFile file("history.txt");
+    if (file.open(QIODevice::WriteOnly | QIODevice::Text)) {
+        QTextStream out(&file);
+        for (const QString &item : qAsConst(historyList)) {
+            out << item << "\n";
+        }
+        file.close();
+    }
+}
+
 void MainWindow::numberGroup_clicked(QAbstractButton* button)
 {
     //Get string from display
