@@ -373,12 +373,6 @@ color: #ffffff;</string>
      <height>26</height>
     </rect>
    </property>
-   <widget class="QMenu" name="menu">
-    <property name="title">
-     <string>Меню</string>
-    </property>
-    <addaction name="save"/>
-   </widget>
    <widget class="QMenu" name="info">
     <property name="title">
      <string>Справка</string>
@@ -394,6 +388,12 @@ color: #ffffff;</string>
     </property>
     <addaction name="show"/>
     <addaction name="hide"/>
+   </widget>
+   <widget class="QMenu" name="menu">
+    <property name="title">
+     <string>Меню</string>
+    </property>
+    <addaction name="save"/>
    </widget>
    <addaction name="menu"/>
    <addaction name="history"/>
@@ -424,7 +424,7 @@ color: #ffffff;</string>
  <resources/>
  <connections/>
  <buttongroups>
-  <buttongroup name="numberGroup"/>
   <buttongroup name="actionGroup"/>
+  <buttongroup name="numberGroup"/>
  </buttongroups>
 </ui>

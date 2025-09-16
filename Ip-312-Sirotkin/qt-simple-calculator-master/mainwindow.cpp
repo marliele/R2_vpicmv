@@ -11,21 +11,27 @@ MainWindow::MainWindow(QWidget *parent) :
     historyWidget = new QWidget(this);
     historyWidget ->setWindowTitle("История");
     historyWidget ->resize(200,400);
+
     historyView = new QListWidget(historyWidget);
     hideHistoryButton = new QPushButton("скрыть", historyWidget);
     clearHistoryButton = new QPushButton("очистить", historyWidget);
+
     QVBoxLayout *mainlayout = new QVBoxLayout(historyWidget);
     mainlayout -> addWidget(hideHistoryButton);
     mainlayout -> addWidget(clearHistoryButton);
     mainlayout -> addWidget(historyView);
     historyWidget->setLayout(mainlayout);
 
+    //Splitter
     QSplitter *mainSplitter = new QSplitter(Qt::Horizontal);
     mainSplitter->addWidget(ui->centralWidget);
     ui->centralWidget->setMinimumWidth(300);
     mainSplitter->addWidget(historyWidget);
     mainSplitter->setStretchFactor(0,1);
     setCentralWidget(mainSplitter);
+
+    historyWidget ->hide();
+
     //Set up empty display panel
     ui->displayPanel->clear();
 
@@ -47,6 +53,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->show, &QAction::triggered, this, &MainWindow::onShowHistory);
     connect(ui->save, &QAction::triggered, this, &MainWindow::onSaveAction);
     connect(ui->about, &QAction::triggered, this, &MainWindow::onAbout);
+
     connect(hideHistoryButton, &QPushButton::clicked, this, &MainWindow::onHideHistory);
     connect(clearHistoryButton, &QPushButton::clicked, this, &MainWindow::onClearHistory);
     connect(historyView, &QListWidget::itemClicked, this, &MainWindow::onHistoryItemClicked);
@@ -311,13 +318,13 @@ void MainWindow::onHideHistory(){
     if(!historyWidget->isVisible()) return;
     resize(width() - historyWidget->width(), height());
     historyWidget ->hide();
-    this->setFixedSize(QSize(350,350));
+    this->setFixedSize(QSize(500,500));
 }
 
 void MainWindow::onShowHistory(){
     if(historyWidget->isVisible()) return;
     historyWidget ->show();
-    this->setFixedSize(QSize(500,500));
+    this->setFixedSize(QSize(700,500));
 }
 
 void MainWindow::onClearHistory(){

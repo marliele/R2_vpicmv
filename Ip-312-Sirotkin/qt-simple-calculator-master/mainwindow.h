@@ -50,7 +50,7 @@ private slots:
     void on_actionSign_clicked();
 
 private:
-    //hui
+
     QList<QString> historyList;
     QWidget *historyWidget;
     QListWidget *historyView;
@@ -58,7 +58,7 @@ private:
     QPushButton *clearHistoryButton;
     QVBoxLayout *historyLayout;
     QTimer *statusBarTimer;
-    //hui
+
     Ui::MainWindow *ui;
     //Digit limit
     const int DIGIT_LIMIT = 16;
