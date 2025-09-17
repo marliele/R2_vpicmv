@@ -32,6 +32,8 @@ public:
     QAction *hide;
     QAction *save;
     QAction *about;
+    QAction *action;
+    QAction *action_2;
     QWidget *centralWidget;
     QVBoxLayout *verticalLayout;
     QLabel *displayPanel;
@@ -62,9 +64,9 @@ public:
     QPushButton *actionCalc;
     QStatusBar *statusBar;
     QMenuBar *menuBar;
-    QMenu *menu;
     QMenu *info;
     QMenu *history;
+    QMenu *menu;
     QButtonGroup *numberGroup;
     QButtonGroup *actionGroup;
 
@@ -92,6 +94,10 @@ public:
         save->setObjectName(QString::fromUtf8("save"));
         about = new QAction(MainWindow);
         about->setObjectName(QString::fromUtf8("about"));
+        action = new QAction(MainWindow);
+        action->setObjectName(QString::fromUtf8("action"));
+        action_2 = new QAction(MainWindow);
+        action_2->setObjectName(QString::fromUtf8("action_2"));
         centralWidget = new QWidget(MainWindow);
         centralWidget->setObjectName(QString::fromUtf8("centralWidget"));
         sizePolicy.setHeightForWidth(centralWidget->sizePolicy().hasHeightForWidth());
@@ -300,22 +306,24 @@ public:
         menuBar = new QMenuBar(MainWindow);
         menuBar->setObjectName(QString::fromUtf8("menuBar"));
         menuBar->setGeometry(QRect(0, 0, 340, 26));
-        menu = new QMenu(menuBar);
-        menu->setObjectName(QString::fromUtf8("menu"));
         info = new QMenu(menuBar);
         info->setObjectName(QString::fromUtf8("info"));
         history = new QMenu(menuBar);
         history->setObjectName(QString::fromUtf8("history"));
         history->setTearOffEnabled(false);
+        menu = new QMenu(menuBar);
+        menu->setObjectName(QString::fromUtf8("menu"));
         MainWindow->setMenuBar(menuBar);
 
         menuBar->addAction(menu->menuAction());
         menuBar->addAction(history->menuAction());
         menuBar->addAction(info->menuAction());
-        menu->addAction(save);
         info->addAction(about);
         history->addAction(show);
         history->addAction(hide);
+        history->addAction(action);
+        history->addAction(action_2);
+        menu->addAction(save);
 
         retranslateUi(MainWindow);
 
@@ -329,6 +337,8 @@ public:
         hide->setText(QApplication::translate("MainWindow", "\320\241\320\272\321\200\321\213\321\202\321\214 (F3)", nullptr));
         save->setText(QApplication::translate("MainWindow", "\320\241\320\276\321\205\321\200\320\260\320\275\320\270\321\202\321\214 (F1)", nullptr));
         about->setText(QApplication::translate("MainWindow", "\320\236 \320\277\321\200\320\270\320\273\320\276\320\266\320\265\320\275\320\270\320\270 (F4)", nullptr));
+        action->setText(QApplication::translate("MainWindow", "\320\241\320\276\321\205\321\200\320\260\320\275\320\270\321\202\321\214 (F5)", nullptr));
+        action_2->setText(QApplication::translate("MainWindow", "\320\227\320\260\320\263\321\200\321\203\320\267\320\270\321\202\321\214 (F6)", nullptr));
         displayPanel->setText(QString());
         actionClear->setText(QApplication::translate("MainWindow", "C", nullptr));
         actionDel->setText(QApplication::translate("MainWindow", "Del", nullptr));
@@ -350,9 +360,9 @@ public:
         comma->setText(QApplication::translate("MainWindow", ".", nullptr));
         actionSign->setText(QApplication::translate("MainWindow", "+/-", nullptr));
         actionCalc->setText(QApplication::translate("MainWindow", "=", nullptr));
-        menu->setTitle(QApplication::translate("MainWindow", "\320\234\320\265\320\275\321\216", nullptr));
         info->setTitle(QApplication::translate("MainWindow", "\320\241\320\277\321\200\320\260\320\262\320\272\320\260", nullptr));
         history->setTitle(QApplication::translate("MainWindow", "\320\230\321\201\321\202\320\276\321\200\320\270\321\217", nullptr));
+        menu->setTitle(QApplication::translate("MainWindow", "\320\234\320\265\320\275\321\216", nullptr));
     } // retranslateUi
 
 };

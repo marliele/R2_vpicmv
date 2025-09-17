@@ -58,6 +58,8 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(clearHistoryButton, &QPushButton::clicked, this, &MainWindow::onClearHistory);
     connect(historyView, &QListWidget::itemClicked, this, &MainWindow::onHistoryItemClicked);
     loadHistoryFromFile();
+    connect(ui->action_2, &QAction::triggered,this, &MainWindow::loadHistoryFromFile);
+    connect(ui->action, &QAction::triggered,this, &MainWindow::saveHistoryFile);
 }
 
 MainWindow::~MainWindow()
@@ -423,6 +425,12 @@ void MainWindow::keyPressEvent(QKeyEvent *e) {
             break;
         case Qt::Key_F4:
             onAbout();
+            break;
+        case Qt::Key_F5:
+            saveHistoryFile();
+            break;
+        case Qt::Key_F6:
+            loadHistoryFromFile();
             break;
     }
 }

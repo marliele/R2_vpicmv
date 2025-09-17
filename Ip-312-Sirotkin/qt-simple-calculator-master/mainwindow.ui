@@ -388,6 +388,8 @@ color: #ffffff;</string>
     </property>
     <addaction name="show"/>
     <addaction name="hide"/>
+    <addaction name="action"/>
+    <addaction name="action_2"/>
    </widget>
    <widget class="QMenu" name="menu">
     <property name="title">
@@ -419,12 +421,22 @@ color: #ffffff;</string>
     <string>О приложении (F4)</string>
    </property>
   </action>
+  <action name="action">
+   <property name="text">
+    <string>Сохранить (F5)</string>
+   </property>
+  </action>
+  <action name="action_2">
+   <property name="text">
+    <string>Загрузить (F6)</string>
+   </property>
+  </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <resources/>
  <connections/>
  <buttongroups>
-  <buttongroup name="actionGroup"/>
   <buttongroup name="numberGroup"/>
+  <buttongroup name="actionGroup"/>
  </buttongroups>
 </ui>
