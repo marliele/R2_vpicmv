@@ -31,6 +31,10 @@
 #include <QJsonObject>
 #include <QString>
 #include <QJsonDocument>
+#include <QCloseEvent>
+#include <QMessageBox>
+#include <QFileInfo>
+#include <QPushButton>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -50,11 +54,16 @@ private:
     static QHash<QString, QSourceHighlite::QSourceHighliter::Language> _langStringToEnum;
 
     /* FUNCTIONS */
+    void closeEvent(QCloseEvent *event);
     void initLangsEnum();
     void initLangsComboBox();
     void initThemesComboBox();
     void on_actionTXT_triggered();
     void on_actionJSON_triggered();
+    void on_actionJSON_opener();
+    void on_actionTXT_opener();
+    void on_actionExit_triggered();
+    bool maybeSave();
 
 private slots:
     void themeChanged(int);

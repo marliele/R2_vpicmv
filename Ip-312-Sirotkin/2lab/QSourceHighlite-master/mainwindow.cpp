@@ -28,6 +28,9 @@
 #include <QDebug>
 #include <QDir>
 
+QString lastfilepath ;
+QString lastsufix="";
+
 using namespace QSourceHighlite;
 
 QHash<QString, QSourceHighliter::Language> MainWindow::_langStringToEnum;
@@ -59,11 +62,17 @@ MainWindow::MainWindow(QWidget *parent)
     //    connect(ui->plainTextEdit, &QPlainTextEdit::textChanged, this, &MainWindow::printDebug);
     connect(ui->action_3, &QAction::triggered,this, &MainWindow::on_actionTXT_triggered);
     connect(ui->actionJson, &QAction::triggered,this, &MainWindow::on_actionJSON_triggered);
+    connect(ui->actionJson_2, &QAction::triggered,this, &MainWindow::on_actionJSON_opener);
+    connect(ui->actionTXT, &QAction::triggered,this, &MainWindow::on_actionTXT_opener);
+    connect(ui->action_4, &QAction::triggered,this, &MainWindow::on_actionExit_triggered);
 }
 
 MainWindow::~MainWindow()
 {
-    delete ui;
+}
+
+void MainWindow::closeEvent(QCloseEvent *event){
+    on_actionExit_triggered();
 }
 
 void MainWindow::initLangsEnum()
@@ -136,6 +145,13 @@ void MainWindow::themeChanged(int) {
     highlighter->setTheme(theme);
 }
 
+void MainWindow::on_actionExit_triggered()
+{
+    if (maybeSave()) {
+//        delete ui;
+    }
+}
+
 void MainWindow::on_actionTXT_triggered(){
     QString fileName = QFileDialog::getSaveFileName(this,
         "Сохранить TXT файл",
@@ -143,7 +159,7 @@ void MainWindow::on_actionTXT_triggered(){
         "TXT файлы (*.txt)");
     if (fileName.isEmpty()) return;
     QFile file(fileName);
-        if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
+        if (!file.open(QIODevice::ReadWrite | QIODevice::Text)) {
             ui->statusbar->showMessage("Ошибка: не удалось открыть файл для записи", 3000);
             return;
         }
@@ -165,7 +181,7 @@ void MainWindow::on_actionJSON_triggered()
     if (fileName.isEmpty()) return;
 
     QFile file(fileName);
-    if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
+    if (!file.open(QIODevice::ReadWrite | QIODevice::Text)) {
         ui->statusbar->showMessage("Ошибка: не удалось открыть файл для записи", 3000);
         return;
     }
@@ -177,9 +193,83 @@ void MainWindow::on_actionJSON_triggered()
     QJsonDocument doc(root);
     file.write(doc.toJson());
     file.close();
-    ui->statusbar->showMessage("Сохранен файл "+fileName, 3000);
+//    ui->statusbar->showMessage("Сохранен файл "+fileName, 3000);
 }
 
+void MainWindow::on_actionJSON_opener(){
+    on_actionExit_triggered();
+    QString fileName = QFileDialog::getOpenFileName(this,
+          "Открыть JSON файл",
+          "",
+          "JSON файлы (*.json)");
+
+      if (fileName.isEmpty()) return;
+
+      QFile file(fileName);
+      QFileInfo fi(fileName);
+      lastfilepath = fi.absoluteFilePath();
+      lastsufix = fi.completeSuffix();
+//      ui->statusbar->showMessage("123"+ lastfilepath +lastsufix ,3000);
+      if (!file.open(QIODevice::ReadWrite | QIODevice::Text)) {
+          ui->statusbar->showMessage("Ошибка: не удалось открыть файл для чтения", 3000);
+          return;
+      }
+
+      QJsonParseError error;
+      QJsonDocument doc = QJsonDocument::fromJson(file.readAll(), &error);
+      file.close();
+
+      if (error.error != QJsonParseError::NoError) {
+          ui->statusbar->showMessage("Ошибка парсинга JSON", 3000);
+          return;
+      }
+
+      // Парсинг данных из JSON
+      QJsonObject root = doc.object();
+
+      if (root.contains("language") && root["language"].isString()) {
+          QString language = root["language"].toString();
+          // Установка выбранного языка в комбобокс
+          int index = ui->langComboBox->findText(language);
+          if (index != -1) {
+              ui->langComboBox->setCurrentIndex(index);
+          }
+      }
+
+      if (root.contains("text") && root["text"].isString()) {
+          QString text = root["text"].toString();
+          ui->plainTextEdit->setPlainText(text);
+      }
+
+      ui->statusbar->showMessage("Загружен файл " + fileName, 3000); return;
+    }
+
+void MainWindow::on_actionTXT_opener(){
+    on_actionExit_triggered();
+    QString fileName = QFileDialog::getOpenFileName(this,
+        "Открыть TXT файл",
+        "",
+        "TXT файлы (*.txt)");
+
+    if (fileName.isEmpty()) return;
+
+    QFile file(fileName);
+    QFileInfo fi(fileName);
+    lastfilepath = fi.absoluteFilePath();
+    lastsufix = fi.completeSuffix();
+    if (!file.open(QIODevice::ReadWrite | QIODevice::Text)) {
+        ui->statusbar->showMessage("Ошибка: не удалось открыть файл для чтения", 3000);
+        return;
+    }
+
+    QTextStream in(&file);
+    in.setCodec("UTF-8");
+    QString content = in.readAll();
+    file.close();
+
+    ui->plainTextEdit->setPlainText(content);
+    ui->statusbar->showMessage("Загружен файл " + fileName, 3000);
+}
 
 void MainWindow::languageChanged(const QString &lang) {
     highlighter->setCurrentLanguage(_langStringToEnum.value(lang));
@@ -190,4 +280,71 @@ void MainWindow::languageChanged(const QString &lang) {
 //        ui->plainTextEdit->setPlainText(QString::fromUtf8(text));
 //    }
 //    f.close();
+}
+
+bool MainWindow::maybeSave()
+{
+//    ui->statusbar->showMessage("123"+ lastfilepath +lastsufix ,3000);
+    if (!ui->plainTextEdit->document()->isModified()) {
+        return true;
+    }
+
+    QMessageBox::StandardButton reply;
+    reply = QMessageBox::question(this,
+        "Несохраненные изменения",
+        "Документ был изменен. Хотите сохранить изменения?",
+        QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel,
+        QMessageBox::Save);
+
+    if (reply == QMessageBox::Save) {
+        if(lastfilepath != ""){
+            if(lastsufix == "json"){
+                QFile file(lastfilepath);
+                if (!file.open(QIODevice::ReadWrite | QIODevice::Text)) {
+                    ui->statusbar->showMessage("Ошибка: не удалось открыть файл для записи", 3000);
+
+                }
+
+                QJsonObject root;
+                root["language"] = ui->langComboBox->currentText();
+                root["text"] = ui->plainTextEdit->toPlainText();
+
+                QJsonDocument doc(root);
+                file.write(doc.toJson());
+                file.close();
+
+            }
+            else if(lastsufix == "txt"){
+                QFile file(lastfilepath);
+                if (!file.open(QIODevice::ReadWrite | QIODevice::Text)) {
+                    ui->statusbar->showMessage("Ошибка: не удалось открыть файл для записи", 3000);
+                }
+                QTextStream out(&file);
+                out.setCodec("UTF-8");
+                out << ui->plainTextEdit->toPlainText();
+                        file.close();
+
+            }
+        }
+        else{
+            QMessageBox saver;
+            saver.setText ("сохранить файл как");
+            QAbstractButton *btntxt = saver.addButton("txt",QMessageBox::AcceptRole);
+            QAbstractButton *btnjson = saver.addButton("Json",QMessageBox::AcceptRole);
+            QAbstractButton *btncancel = saver.addButton(QMessageBox::Cancel);
+            saver.exec();
+
+            if(saver.clickedButton() == btntxt){
+                on_actionTXT_triggered();
+            }
+            else if(saver.clickedButton() == btnjson){
+                on_actionJSON_triggered();
+            }
+        }
+    } else if (reply == QMessageBox::Cancel) {
+        return false; // Отмена выхода
+    }
+//    delete ui;
+    return true;
+// Продолжить без сохранения
 }

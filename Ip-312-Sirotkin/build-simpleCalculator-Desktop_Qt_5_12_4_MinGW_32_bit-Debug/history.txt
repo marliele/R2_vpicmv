@@ -1,2 +1,87 @@
-345
-54546
+import pandas as pd
+from sklearn.model_selection import train_test_split
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+Nf = ((19 + 2) % 5) + 1
+Nv = (19 % 3) + 1
+Nya = (((19 * 6 + 13) % 8) % 3) +1
+
+print(f"Номер файла Nф: {Nf}; Вариант алгоритма: {Nv}; Номер ядра для алгоритма: {Nya}")
+
+df = pd.read_csv('/content/drive/MyDrive/data2.csv')
+
+print("Информация о данных:")
+print(df.info())
+
+def normalize_data(train_data, test_data):
+    normalized_train = train_data.copy()
+    normalized_test = test_data.copy()
+    
+    for column in train_data.columns:
+        min_val = train_data[column].min()
+        max_val = train_data[column].max()
+        range_val = max_val - min_val
+      
+        if range_val == 0:
+            normalized_train[column] = 0
+            normalized_test[column] = 0
+        else:
+            normalized_train[column] = (train_data[column] - min_val) / range_val
+            normalized_test[column] = (test_data[column] - min_val) / range_val
+    
+    return normalized_train, normalized_test
+
+def normalize_data_y(train_data, test_data):
+    normalized_train = train_data.copy()
+    normalized_test = test_data.copy()
+    min_val = train_data.min()
+    max_val = train_data.max()
+    range_val = max_val - min_val
+    if range_val == 0:
+      normalized_train = 0
+      normalized_test = 0
+    else:
+      normalized_train = (train_data - min_val) / range_val
+      normalized_test = (test_data - min_val) / range_val
+    
+    return normalized_train, normalized_test
+
+splits = []
+splits_count = 2
+
+for i in range(splits_count):
+    X = df[['MrotInHour', 'Class']]
+    y = df['Salary']
+    X_train, X_test, y_train, y_test = train_test_split(
+        X, y, 
+        test_size=3/10,
+        random_state=i,
+        shuffle=True
+    )
+    
+    X_train_normalized, X_test_normalized = normalize_data(X_train, X_test)
+    y_train_normalized, y_test_normalized = normalize_data_y(y_train, y_test)
+    
+    splits.append({
+        'X_train': X_train_normalized, 
+        'X_test': X_test_normalized,
+        'y_train': y_train_normalized, 
+        'y_test': y_test_normalized,
+        'X_train_original': X_train,
+        'X_test_original': X_test,
+        'y_train_original': y_train,
+        'y_test_original': y_test
+    })
+    
+    print(f"Разбиение {i + 1}:")
+    print("Оригинальные данные (первые 5 строк) X:")
+    print(X_train.head())
+    print("Оригинальные данные (первые 5 строк) Y:")
+    print(y_train.head())
+    print("\n")
+    print("Нормализованные данные (первые 5 строк) X:")
+    print(X_train_normalized.head())
+    print("Нормализованные данные (первые 5 строк) Y:")
+    print(y_train_normalized.head())
+    print("\n\n")
