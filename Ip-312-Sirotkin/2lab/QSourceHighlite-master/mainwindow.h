@@ -35,9 +35,13 @@
 #include <QMessageBox>
 #include <QFileInfo>
 #include <QPushButton>
+#include <QDialog>
+#include <QLineEdit>
+#include "searchdialog.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
+
 QT_END_NAMESPACE
 
 class MainWindow : public QMainWindow
@@ -64,10 +68,17 @@ private:
     void on_actionTXT_opener();
     void on_actionExit_triggered();
     bool maybeSave();
+    void onFindText(const QString &text);
+    void replaceText(const QString &find, const QString &replace);
+    void onReplaceAll(const QString &find, const QString &replace);
+    void on_action_11_triggered();
+
 
 private slots:
     void themeChanged(int);
     void languageChanged(const QString &lang);
 
 };
+
+
 #endif // MAINWINDOW_H

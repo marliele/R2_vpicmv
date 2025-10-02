@@ -22,6 +22,7 @@
  */
 
 #include "mainwindow.h"
+#include "searchdialog.h"
 
 #include <QApplication>
 

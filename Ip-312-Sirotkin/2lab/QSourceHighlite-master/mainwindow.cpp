@@ -65,11 +65,13 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->actionJson_2, &QAction::triggered,this, &MainWindow::on_actionJSON_opener);
     connect(ui->actionTXT, &QAction::triggered,this, &MainWindow::on_actionTXT_opener);
     connect(ui->action_4, &QAction::triggered,this, &MainWindow::on_actionExit_triggered);
+    connect(ui->action_11, &QAction::triggered, this, &MainWindow::on_action_11_triggered);
 }
 
 MainWindow::~MainWindow()
 {
 }
+
 
 void MainWindow::closeEvent(QCloseEvent *event){
     on_actionExit_triggered();
@@ -106,6 +108,7 @@ void MainWindow::initLangsEnum()
         { QLatin1String("Yaml"), QSourceHighliter::CodeYAML }
     };
 }
+
 
 void MainWindow::initThemesComboBox()
 {
@@ -150,6 +153,92 @@ void MainWindow::on_actionExit_triggered()
     if (maybeSave()) {
 //        delete ui;
     }
+}
+
+void MainWindow::onFindText(const QString &text) {
+    // Получаем курсор из QPlainTextEdit (текущую позицию ввода)
+    QTextCursor cursor = ui->plainTextEdit->textCursor();
+
+    // Получаем весь текст из редактора как QString для поиска
+    QString content = ui->plainTextEdit->toPlainText();
+
+    // Ищем текст, начиная с текущей позиции курсора
+    int pos = content.indexOf(text, cursor.position(), Qt::CaseSensitive);
+
+    if (pos >= 0) {
+        // Нашли совпадение → устанавливаем курсор на него
+        cursor.setPosition(pos);
+        cursor.movePosition(QTextCursor::Right, QTextCursor::KeepAnchor, text.length());
+        ui->plainTextEdit->setTextCursor(cursor);// выделяем найденный фрагмент
+        ui->statusbar->showMessage(tr("Найдено: ") + text, 3000);
+    } else {
+        // Совпадений нет от текущей позиции до конца, начинаем поиск с самого начала
+        pos = content.indexOf(text, 0, Qt::CaseSensitive);
+        if (pos >= 0) {
+            // Нашли совпадение при повторном поиске с начала
+            cursor.setPosition(pos);
+            cursor.movePosition(QTextCursor::Right, QTextCursor::KeepAnchor, text.length());
+            ui->plainTextEdit->setTextCursor(cursor);
+            ui->statusbar->showMessage("Начали поиск с начала. Найдено: " + text, 3000);
+        } else {
+            // Ничего не найдено даже после повторного поиска
+            QMessageBox::information(this, "Поиск", "Совпадений не найдено");
+            ui->statusbar->showMessage(tr("Совпадений не найдено"), 3000);
+        }
+    }
+}
+
+void MainWindow::replaceText(const QString &find, const QString &replace) {
+    // Получаем указатель на документ
+    QTextDocument *doc = ui->plainTextEdit->document();
+    // Получаем текущий курсор
+    QTextCursor cursor = ui->plainTextEdit->textCursor();
+    // Проверяем, есть ли выделенный текст
+    QString selected = cursor.selectedText();
+
+    // Если есть выделение, и оно совпадает с find - заменяем его
+    if (!selected.isEmpty() && selected == find) {
+        cursor.insertText(replace);// Заменяем выделенный текст
+        ui->plainTextEdit->setTextCursor(cursor);// Перемещаем курсор
+        return;
+    }
+
+    int pos = cursor.position();
+    // Ищем следующее вхождение с учетом регистра
+    QTextCursor found = doc->find(find, pos, QTextDocument::FindCaseSensitively);
+
+    if (!found.isNull()) {
+        // Совпадение найдено - получаем начальную и конечную позиции курсора
+        int start = found.selectionStart();
+        int end = found.selectionEnd();
+        // Замена найденного текста
+        found.insertText(replace);
+        // Создаем новый курсор, чтобы переместить выделение на место замены
+        QTextCursor newCursor = ui->plainTextEdit->textCursor();
+        // Устанавливаем курсор на начало замены
+        newCursor.setPosition(start);
+        // Выделяем текст длиной replace.length()
+        newCursor.movePosition(QTextCursor::Right, QTextCursor::KeepAnchor, replace.length());
+        // Перемещаем курсор в UI
+        ui->plainTextEdit->setTextCursor(newCursor);
+    } else {
+        QMessageBox::information(this, "Замена", "Совпадений не найдено");
+    }
+
+    highlighter->rehighlight(); // обновляем индикатор
+}
+
+void MainWindow::onReplaceAll(const QString &find, const QString &replace) {
+    QString content = ui->plainTextEdit->toPlainText();
+    // Заменяем все вхождения find на replace с учётом регистра
+    QString newContent = content.replace(find, replace, Qt::CaseSensitive);
+
+    // Устанавливаем обновлённый текст обратно в редактор
+    ui->plainTextEdit->setPlainText(newContent);
+    highlighter->rehighlight();
+
+    QString message = QString("Все вхождения '%1' заменены на '%2'").arg(find).arg(replace);
+    ui->statusbar->showMessage(message, 3000);
 }
 
 void MainWindow::on_actionTXT_triggered(){
@@ -281,6 +370,16 @@ void MainWindow::languageChanged(const QString &lang) {
 //    }
 //    f.close();
 }
+
+void MainWindow::on_action_11_triggered()
+{
+    SearchDialog dialog(this);
+    connect(&dialog, &SearchDialog::findNext, this, &MainWindow::onFindText);
+    connect(&dialog, &SearchDialog::replaceText, this, &MainWindow::replaceText);
+    connect(&dialog, &SearchDialog::replaceAll, this, &MainWindow::onReplaceAll);
+    dialog.exec(); // показываем модальное окно
+}
+
 
 bool MainWindow::maybeSave()
 {
