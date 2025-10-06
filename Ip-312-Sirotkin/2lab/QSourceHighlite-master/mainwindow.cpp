@@ -24,7 +24,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "qsourcehighliter.h"
-
+#include "searchdialog.h"
 #include <QDebug>
 #include <QDir>
 
@@ -40,6 +40,20 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+
+    ui->actionTXT->setIcon(QIcon(":/icons/icons/txt.png"));
+    ui->action_3->setIcon(QIcon(":/icons/icons/txt.png"));
+    ui->actionJson->setIcon(QIcon(":/icons/icons/json.png"));
+    ui->actionJson_2->setIcon(QIcon(":/icons/icons/json.png"));
+    ui->action_4->setIcon(QIcon(":/icons/icons/exit.png"));
+
+    ui->action_5->setIcon(QIcon(":/icons/icons/copy.png"));
+    ui->action_6->setIcon(QIcon(":/icons/icons/insert.png"));
+    ui->action_7->setIcon(QIcon(":/icons/icons/cut.png"));
+    ui->action_8->setIcon(QIcon(":/icons/icons/clean.png"));
+    ui->action_9->setIcon(QIcon(":/icons/icons/cancel.png"));
+    ui->action_10->setIcon(QIcon(":/icons/icons/repeat.png"));
+    ui->action_11->setIcon(QIcon(":/icons/icons/search.png"));
 
     initLangsEnum();
     initLangsComboBox();
@@ -156,32 +170,24 @@ void MainWindow::on_actionExit_triggered()
 }
 
 void MainWindow::onFindText(const QString &text) {
-    // Получаем курсор из QPlainTextEdit (текущую позицию ввода)
     QTextCursor cursor = ui->plainTextEdit->textCursor();
-
-    // Получаем весь текст из редактора как QString для поиска
     QString content = ui->plainTextEdit->toPlainText();
 
-    // Ищем текст, начиная с текущей позиции курсора
     int pos = content.indexOf(text, cursor.position(), Qt::CaseSensitive);
 
     if (pos >= 0) {
-        // Нашли совпадение → устанавливаем курсор на него
         cursor.setPosition(pos);
         cursor.movePosition(QTextCursor::Right, QTextCursor::KeepAnchor, text.length());
-        ui->plainTextEdit->setTextCursor(cursor);// выделяем найденный фрагмент
+        ui->plainTextEdit->setTextCursor(cursor);
         ui->statusbar->showMessage(tr("Найдено: ") + text, 3000);
     } else {
-        // Совпадений нет от текущей позиции до конца, начинаем поиск с самого начала
         pos = content.indexOf(text, 0, Qt::CaseSensitive);
         if (pos >= 0) {
-            // Нашли совпадение при повторном поиске с начала
             cursor.setPosition(pos);
             cursor.movePosition(QTextCursor::Right, QTextCursor::KeepAnchor, text.length());
             ui->plainTextEdit->setTextCursor(cursor);
             ui->statusbar->showMessage("Начали поиск с начала. Найдено: " + text, 3000);
         } else {
-            // Ничего не найдено даже после повторного поиска
             QMessageBox::information(this, "Поиск", "Совпадений не найдено");
             ui->statusbar->showMessage(tr("Совпадений не найдено"), 3000);
         }
@@ -189,51 +195,36 @@ void MainWindow::onFindText(const QString &text) {
 }
 
 void MainWindow::replaceText(const QString &find, const QString &replace) {
-    // Получаем указатель на документ
     QTextDocument *doc = ui->plainTextEdit->document();
-    // Получаем текущий курсор
     QTextCursor cursor = ui->plainTextEdit->textCursor();
-    // Проверяем, есть ли выделенный текст
     QString selected = cursor.selectedText();
 
-    // Если есть выделение, и оно совпадает с find - заменяем его
     if (!selected.isEmpty() && selected == find) {
-        cursor.insertText(replace);// Заменяем выделенный текст
-        ui->plainTextEdit->setTextCursor(cursor);// Перемещаем курсор
+        cursor.insertText(replace);
+        ui->plainTextEdit->setTextCursor(cursor);
         return;
     }
 
     int pos = cursor.position();
-    // Ищем следующее вхождение с учетом регистра
     QTextCursor found = doc->find(find, pos, QTextDocument::FindCaseSensitively);
 
     if (!found.isNull()) {
-        // Совпадение найдено - получаем начальную и конечную позиции курсора
         int start = found.selectionStart();
         int end = found.selectionEnd();
-        // Замена найденного текста
         found.insertText(replace);
-        // Создаем новый курсор, чтобы переместить выделение на место замены
         QTextCursor newCursor = ui->plainTextEdit->textCursor();
-        // Устанавливаем курсор на начало замены
         newCursor.setPosition(start);
-        // Выделяем текст длиной replace.length()
         newCursor.movePosition(QTextCursor::Right, QTextCursor::KeepAnchor, replace.length());
-        // Перемещаем курсор в UI
         ui->plainTextEdit->setTextCursor(newCursor);
     } else {
         QMessageBox::information(this, "Замена", "Совпадений не найдено");
     }
-
-    highlighter->rehighlight(); // обновляем индикатор
+    highlighter->rehighlight();
 }
 
 void MainWindow::onReplaceAll(const QString &find, const QString &replace) {
     QString content = ui->plainTextEdit->toPlainText();
-    // Заменяем все вхождения find на replace с учётом регистра
     QString newContent = content.replace(find, replace, Qt::CaseSensitive);
-
-    // Устанавливаем обновлённый текст обратно в редактор
     ui->plainTextEdit->setPlainText(newContent);
     highlighter->rehighlight();
 
@@ -374,10 +365,12 @@ void MainWindow::languageChanged(const QString &lang) {
 void MainWindow::on_action_11_triggered()
 {
     SearchDialog dialog(this);
+
     connect(&dialog, &SearchDialog::findNext, this, &MainWindow::onFindText);
     connect(&dialog, &SearchDialog::replaceText, this, &MainWindow::replaceText);
     connect(&dialog, &SearchDialog::replaceAll, this, &MainWindow::onReplaceAll);
-    dialog.exec(); // показываем модальное окно
+
+    dialog.exec();
 }
 
 

@@ -5,10 +5,8 @@
 #include <QPushButton>
 #include <QDialog>
 #include <QLineEdit>
-
-namespace Ui {
-class SearchDialog;
-}
+#include <QHBoxLayout>
+#include <QVBoxLayout>
 
 class SearchDialog : public QDialog
 {
@@ -23,13 +21,17 @@ signals:
     void replaceText(const QString &find,const QString &replace);
     void replaceAll(const QString &find, const QString &replace);
 
-private:
-    Ui::SearchDialog *ui;
+private slots:
     void on_findButton_Clicked();
     void on_replaceButton_Clicked();
     void on_replaceAllButton_Clicked();
+
+private:
     QLineEdit *findLineEdit;
     QLineEdit *replaceLineEdit;
+    QPushButton *findButton;
+    QPushButton *replaceButton;
+    QPushButton *replaceAllButton;
 
 };
 

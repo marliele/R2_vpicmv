@@ -1,0 +1,14 @@
+<RCC>
+    <qresource prefix="/icons">
+        <file>icons/cancel.png</file>
+        <file>icons/clean.png</file>
+        <file>icons/copy.png</file>
+        <file>icons/cut.png</file>
+        <file>icons/exit.png</file>
+        <file>icons/insert.png</file>
+        <file>icons/json.png</file>
+        <file>icons/repeat.png</file>
+        <file>icons/search.png</file>
+        <file>icons/txt.png</file>
+    </qresource>
+</RCC>

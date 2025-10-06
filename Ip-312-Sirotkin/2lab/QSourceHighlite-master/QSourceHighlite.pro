@@ -9,11 +9,11 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
     main.cpp \
-    mainwindow.cpp \ \
+    mainwindow.cpp \ 
     searchdialog.cpp
 
 HEADERS += \
-    mainwindow.h \ \
+    mainwindow.h \ 
     searchdialog.h
 
 FORMS += \
@@ -27,3 +27,6 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 DISTFILES += \
     README.md
+
+RESOURCES += \
+    icons.qrc

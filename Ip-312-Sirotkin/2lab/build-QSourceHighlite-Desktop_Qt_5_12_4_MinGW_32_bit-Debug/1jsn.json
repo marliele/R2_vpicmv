@@ -1,0 +1,4 @@
+{
+    "language": "C++",
+    "text": "int num = 8;\n\nint main()\n{\n  num += 1;\n}\n\nnum = 0;"
+}

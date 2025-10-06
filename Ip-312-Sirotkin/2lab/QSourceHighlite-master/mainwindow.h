@@ -68,9 +68,11 @@ private:
     void on_actionTXT_opener();
     void on_actionExit_triggered();
     bool maybeSave();
+private slots:
     void onFindText(const QString &text);
     void replaceText(const QString &find, const QString &replace);
     void onReplaceAll(const QString &find, const QString &replace);
+
     void on_action_11_triggered();
 
 
