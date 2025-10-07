@@ -10,5 +10,8 @@
         <file>icons/repeat.png</file>
         <file>icons/search.png</file>
         <file>icons/txt.png</file>
+        <file>icons/free-exit-icon-2860-thumb.png</file>
+        <file>icons/save_txt.png</file>
+        <file>icons/save_json.png</file>
     </qresource>
 </RCC>

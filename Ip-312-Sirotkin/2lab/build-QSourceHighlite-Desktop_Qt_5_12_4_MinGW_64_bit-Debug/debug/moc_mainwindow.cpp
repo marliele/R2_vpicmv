@@ -21,8 +21,8 @@ QT_BEGIN_MOC_NAMESPACE
 QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 struct qt_meta_stringdata_MainWindow_t {
-    QByteArrayData data[5];
-    char stringdata0[46];
+    QByteArrayData data[12];
+    char stringdata0[123];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -32,14 +32,23 @@ struct qt_meta_stringdata_MainWindow_t {
 static const qt_meta_stringdata_MainWindow_t qt_meta_stringdata_MainWindow = {
     {
 QT_MOC_LITERAL(0, 0, 10), // "MainWindow"
-QT_MOC_LITERAL(1, 11, 12), // "themeChanged"
-QT_MOC_LITERAL(2, 24, 0), // ""
-QT_MOC_LITERAL(3, 25, 15), // "languageChanged"
-QT_MOC_LITERAL(4, 41, 4) // "lang"
+QT_MOC_LITERAL(1, 11, 10), // "onFindText"
+QT_MOC_LITERAL(2, 22, 0), // ""
+QT_MOC_LITERAL(3, 23, 4), // "text"
+QT_MOC_LITERAL(4, 28, 11), // "replaceText"
+QT_MOC_LITERAL(5, 40, 4), // "find"
+QT_MOC_LITERAL(6, 45, 7), // "replace"
+QT_MOC_LITERAL(7, 53, 12), // "onReplaceAll"
+QT_MOC_LITERAL(8, 66, 22), // "on_action_11_triggered"
+QT_MOC_LITERAL(9, 89, 12), // "themeChanged"
+QT_MOC_LITERAL(10, 102, 15), // "languageChanged"
+QT_MOC_LITERAL(11, 118, 4) // "lang"
 
     },
-    "MainWindow\0themeChanged\0\0languageChanged\0"
-    "lang"
+    "MainWindow\0onFindText\0\0text\0replaceText\0"
+    "find\0replace\0onReplaceAll\0"
+    "on_action_11_triggered\0themeChanged\0"
+    "languageChanged\0lang"
 };
 #undef QT_MOC_LITERAL
 
@@ -49,7 +58,7 @@ static const uint qt_meta_data_MainWindow[] = {
        8,       // revision
        0,       // classname
        0,    0, // classinfo
-       2,   14, // methods
+       6,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -57,12 +66,20 @@ static const uint qt_meta_data_MainWindow[] = {
        0,       // signalCount
 
  // slots: name, argc, parameters, tag, flags
-       1,    1,   24,    2, 0x08 /* Private */,
-       3,    1,   27,    2, 0x08 /* Private */,
+       1,    1,   44,    2, 0x08 /* Private */,
+       4,    2,   47,    2, 0x08 /* Private */,
+       7,    2,   52,    2, 0x08 /* Private */,
+       8,    0,   57,    2, 0x08 /* Private */,
+       9,    1,   58,    2, 0x08 /* Private */,
+      10,    1,   61,    2, 0x08 /* Private */,
 
  // slots: parameters
+    QMetaType::Void, QMetaType::QString,    3,
+    QMetaType::Void, QMetaType::QString, QMetaType::QString,    5,    6,
+    QMetaType::Void, QMetaType::QString, QMetaType::QString,    5,    6,
+    QMetaType::Void,
     QMetaType::Void, QMetaType::Int,    2,
-    QMetaType::Void, QMetaType::QString,    4,
+    QMetaType::Void, QMetaType::QString,   11,
 
        0        // eod
 };
@@ -73,8 +90,12 @@ void MainWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, 
         auto *_t = static_cast<MainWindow *>(_o);
         Q_UNUSED(_t)
         switch (_id) {
-        case 0: _t->themeChanged((*reinterpret_cast< int(*)>(_a[1]))); break;
-        case 1: _t->languageChanged((*reinterpret_cast< const QString(*)>(_a[1]))); break;
+        case 0: _t->onFindText((*reinterpret_cast< const QString(*)>(_a[1]))); break;
+        case 1: _t->replaceText((*reinterpret_cast< const QString(*)>(_a[1])),(*reinterpret_cast< const QString(*)>(_a[2]))); break;
+        case 2: _t->onReplaceAll((*reinterpret_cast< const QString(*)>(_a[1])),(*reinterpret_cast< const QString(*)>(_a[2]))); break;
+        case 3: _t->on_action_11_triggered(); break;
+        case 4: _t->themeChanged((*reinterpret_cast< int(*)>(_a[1]))); break;
+        case 5: _t->languageChanged((*reinterpret_cast< const QString(*)>(_a[1]))); break;
         default: ;
         }
     }
@@ -109,13 +130,13 @@ int MainWindow::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 2)
+        if (_id < 6)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 2;
+        _id -= 6;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 2)
+        if (_id < 6)
             *reinterpret_cast<int*>(_a[0]) = -1;
-        _id -= 2;
+        _id -= 6;
     }
     return _id;
 }
