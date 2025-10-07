@@ -35,6 +35,8 @@ SearchDialog::SearchDialog(QWidget *parent) :
         setLayout(mainLayout);
         setWindowTitle(tr("Поиск и замена"));
 
+        setMinimumSize(300, 150);
+
         // Подключаем сигналы кнопок к слотам
         connect(findButton, &QPushButton::clicked, this, &SearchDialog::on_findButton_Clicked);
         connect(replaceButton, &QPushButton::clicked, this, &SearchDialog::on_replaceButton_Clicked);

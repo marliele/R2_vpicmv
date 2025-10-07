@@ -3,7 +3,6 @@
 
 #include <QDialog>
 #include <QPushButton>
-#include <QDialog>
 #include <QLineEdit>
 #include <QHBoxLayout>
 #include <QVBoxLayout>
