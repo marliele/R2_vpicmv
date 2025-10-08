@@ -5,7 +5,6 @@
 SearchDialog::SearchDialog(QWidget *parent) :
     QDialog(parent)
 {
-    // Создаём элементы управления
         findLineEdit = new QLineEdit(this);
         replaceLineEdit = new QLineEdit(this);
 
@@ -13,7 +12,6 @@ SearchDialog::SearchDialog(QWidget *parent) :
         replaceButton = new QPushButton(tr("Заменить"), this);
         replaceAllButton = new QPushButton(tr("Заменить все"), this);
 
-        // Компоновка интерфейса
         QHBoxLayout *findLayout = new QHBoxLayout;
         findLayout->addWidget(new QLabel(tr("Найти:")));
         findLayout->addWidget(findLineEdit);
@@ -37,7 +35,6 @@ SearchDialog::SearchDialog(QWidget *parent) :
 
         setMinimumSize(300, 150);
 
-        // Подключаем сигналы кнопок к слотам
         connect(findButton, &QPushButton::clicked, this, &SearchDialog::on_findButton_Clicked);
         connect(replaceButton, &QPushButton::clicked, this, &SearchDialog::on_replaceButton_Clicked);
         connect(replaceAllButton, &QPushButton::clicked, this, &SearchDialog::on_replaceAllButton_Clicked);

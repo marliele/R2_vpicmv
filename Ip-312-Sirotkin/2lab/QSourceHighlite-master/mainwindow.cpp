@@ -41,19 +41,19 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
 
-    ui->actionTXT->setIcon(QIcon(":/icons/icons/txt.png"));
-    ui->action_3->setIcon(QIcon(":/icons/icons/txt.png"));
-    ui->actionJson->setIcon(QIcon(":/icons/icons/json.png"));
-    ui->actionJson_2->setIcon(QIcon(":/icons/icons/json.png"));
-    ui->action_4->setIcon(QIcon(":/icons/icons/exit.png"));
+//    ui->actionTXT->setIcon(QIcon(":/icons/icons/txt.png"));
+//    ui->action_3->setIcon(QIcon(":/icons/icons/txt.png"));
+//    ui->actionJson->setIcon(QIcon(":/icons/icons/json.png"));
+//    ui->actionJson_2->setIcon(QIcon(":/icons/icons/json.png"));
+//    ui->action_4->setIcon(QIcon(":/icons/icons/exit.png"));
 
-    ui->action_5->setIcon(QIcon(":/icons/icons/copy.png"));
-    ui->action_6->setIcon(QIcon(":/icons/icons/insert.png"));
-    ui->action_7->setIcon(QIcon(":/icons/icons/cut.png"));
-    ui->action_8->setIcon(QIcon(":/icons/icons/clean.png"));
-    ui->action_9->setIcon(QIcon(":/icons/icons/cancel.png"));
-    ui->action_10->setIcon(QIcon(":/icons/icons/repeat.png"));
-    ui->action_11->setIcon(QIcon(":/icons/icons/search.png"));
+//    ui->action_5->setIcon(QIcon(":/icons/icons/copy.png"));
+//    ui->action_6->setIcon(QIcon(":/icons/icons/insert.png"));
+//    ui->action_7->setIcon(QIcon(":/icons/icons/cut.png"));
+//    ui->action_8->setIcon(QIcon(":/icons/icons/clean.png"));
+//    ui->action_9->setIcon(QIcon(":/icons/icons/cancel.png"));
+//    ui->action_10->setIcon(QIcon(":/icons/icons/repeat.png"));
+//    ui->action_11->setIcon(QIcon(":/icons/icons/search.png"));
 
     initLangsEnum();
     initLangsComboBox();
@@ -304,12 +304,10 @@ void MainWindow::on_actionJSON_opener(){
           return;
       }
 
-      // Парсинг данных из JSON
       QJsonObject root = doc.object();
 
       if (root.contains("language") && root["language"].isString()) {
           QString language = root["language"].toString();
-          // Установка выбранного языка в комбобокс
           int index = ui->langComboBox->findText(language);
           if (index != -1) {
               ui->langComboBox->setCurrentIndex(index);
