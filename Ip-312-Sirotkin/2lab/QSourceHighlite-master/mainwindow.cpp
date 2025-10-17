@@ -41,20 +41,6 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
 
-//    ui->actionTXT->setIcon(QIcon(":/icons/icons/txt.png"));
-//    ui->action_3->setIcon(QIcon(":/icons/icons/txt.png"));
-//    ui->actionJson->setIcon(QIcon(":/icons/icons/json.png"));
-//    ui->actionJson_2->setIcon(QIcon(":/icons/icons/json.png"));
-//    ui->action_4->setIcon(QIcon(":/icons/icons/exit.png"));
-
-//    ui->action_5->setIcon(QIcon(":/icons/icons/copy.png"));
-//    ui->action_6->setIcon(QIcon(":/icons/icons/insert.png"));
-//    ui->action_7->setIcon(QIcon(":/icons/icons/cut.png"));
-//    ui->action_8->setIcon(QIcon(":/icons/icons/clean.png"));
-//    ui->action_9->setIcon(QIcon(":/icons/icons/cancel.png"));
-//    ui->action_10->setIcon(QIcon(":/icons/icons/repeat.png"));
-//    ui->action_11->setIcon(QIcon(":/icons/icons/search.png"));
-
     initLangsEnum();
     initLangsComboBox();
     initThemesComboBox();
@@ -71,8 +57,11 @@ MainWindow::MainWindow(QWidget *parent)
             static_cast<void (QComboBox::*) (int)>(&QComboBox::currentIndexChanged),
             this, &MainWindow::themeChanged);
 
-    ui->langComboBox->setCurrentText("Asm");
-    languageChanged("Asm");
+    ui->langComboBox->setCurrentText("C");
+    languageChanged("C");
+    themeChanged(0);
+    applyEditorBackground(QSourceHighliter::Themes::Monokai);
+
     //    connect(ui->plainTextEdit, &QPlainTextEdit::textChanged, this, &MainWindow::printDebug);
     connect(ui->action_3, &QAction::triggered,this, &MainWindow::on_actionTXT_triggered);
     connect(ui->actionJson, &QAction::triggered,this, &MainWindow::on_actionJSON_triggered);
@@ -126,8 +115,12 @@ void MainWindow::initLangsEnum()
 
 void MainWindow::initThemesComboBox()
 {
+    ui->themeComboBox->addItem("default", 0);
+    ui->themeComboBox->setCurrentText("default");
     ui->themeComboBox->addItem("Monokai", QSourceHighliter::Themes::Monokai);
     ui->themeComboBox->addItem("debug", QSourceHighliter::Themes::Monokai);
+    ui->themeComboBox->addItem("DarkTheme", QSourceHighliter::Themes::DarkTheme);
+    ui->themeComboBox->addItem("LightTheme", QSourceHighliter::Themes::LightTheme);
 }
 
 void MainWindow::initLangsComboBox() {
@@ -160,6 +153,19 @@ void MainWindow::initLangsComboBox() {
 void MainWindow::themeChanged(int) {
     QSourceHighliter::Themes theme = (QSourceHighliter::Themes)ui->themeComboBox->currentData().toInt();
     highlighter->setTheme(theme);
+}
+
+void MainWindow::applyEditorBackground(QSourceHighliter::Themes theme) {
+auto themeFormats = QSourceHighliterTheme::theme(theme);
+QTextCharFormat blockFormat =
+themeFormats.value(QSourceHighliter::CodeBlock);
+ QColor bgColor = blockFormat.background().color();
+ if (!bgColor.isValid()) {
+ bgColor = Qt::white;
+ }
+ QString styleSheet = QString("QPlainTextEdit { background-color: %1; }").
+arg(bgColor.name());
+ ui->plainTextEdit->setStyleSheet(styleSheet);
 }
 
 void MainWindow::on_actionExit_triggered()

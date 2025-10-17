@@ -59,11 +59,47 @@ static QHash<QSourceHighliter::Token, QTextCharFormat> monokai()
     return _formats;
 }
 
+static QHash<QSourceHighliter::Token, QTextCharFormat> DarkTheme()
+{
+    QHash<QSourceHighliter::Token, QTextCharFormat> _formats = formats();
+
+    _formats[QSourceHighliter::Token::CodeBlock].setForeground(QColor(63, 62, 56));
+    _formats[QSourceHighliter::Token::CodeKeyWord].setForeground(QColor(225, 97, 182));
+    _formats[QSourceHighliter::Token::CodeString].setForeground(QColor(230, 219, 116));
+    _formats[QSourceHighliter::Token::CodeComment].setForeground(QColor(117, 113, 94));
+    _formats[QSourceHighliter::Token::CodeType].setForeground(QColor(102, 217, 239));
+    _formats[QSourceHighliter::Token::CodeOther].setForeground(QColor(249, 38, 114));
+    _formats[QSourceHighliter::Token::CodeNumLiteral].setForeground(QColor(174, 129, 255));
+    _formats[QSourceHighliter::Token::CodeBuiltIn].setForeground(QColor(166, 226, 46));
+
+    return _formats;
+}
+
+static QHash<QSourceHighliter::Token, QTextCharFormat> LightTheme()
+{
+    QHash<QSourceHighliter::Token, QTextCharFormat> _formats = formats();
+
+    _formats[QSourceHighliter::Token::CodeBlock].setForeground(QColor(227, 226, 214));
+    _formats[QSourceHighliter::Token::CodeKeyWord].setForeground(QColor(249, 38, 114));
+    _formats[QSourceHighliter::Token::CodeString].setForeground(QColor(230, 219, 116));
+    _formats[QSourceHighliter::Token::CodeComment].setForeground(QColor(117, 113, 94));
+    _formats[QSourceHighliter::Token::CodeType].setForeground(QColor(102, 217, 239));
+    _formats[QSourceHighliter::Token::CodeOther].setForeground(QColor(249, 38, 114));
+    _formats[QSourceHighliter::Token::CodeNumLiteral].setForeground(QColor(174, 129, 255));
+    _formats[QSourceHighliter::Token::CodeBuiltIn].setForeground(QColor(166, 226, 46));
+
+    return _formats;
+}
+
 QHash<QSourceHighliter::Token, QTextCharFormat>
         QSourceHighliterTheme::theme(QSourceHighliter::Themes theme) {
     switch (theme) {
     case QSourceHighliter::Themes::Monokai:
         return monokai();
+    case QSourceHighliter::Themes::DarkTheme:
+        return DarkTheme();
+    case QSourceHighliter::Themes::LightTheme:
+        return LightTheme();
     default:
         return {};
     }

@@ -38,6 +38,7 @@
 #include <QDialog>
 #include <QLineEdit>
 #include "searchdialog.h"
+#include "qsourcehighliterthemes.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -62,6 +63,8 @@ private:
     void initLangsEnum();
     void initLangsComboBox();
     void initThemesComboBox();
+    void applyEditorBackground(QSourceHighlite::QSourceHighliter::Themes
+    theme);
     void on_actionTXT_triggered();
     void on_actionJSON_triggered();
     void on_actionJSON_opener();
