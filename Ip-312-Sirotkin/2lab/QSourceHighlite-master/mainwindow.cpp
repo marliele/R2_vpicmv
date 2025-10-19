@@ -114,7 +114,6 @@ void MainWindow::initLangsEnum()
 
 void MainWindow::initThemesComboBox()
 {
-    ui->themeComboBox->addItem("Default", 0);
     ui->themeComboBox->addItem("Monokai", QSourceHighliter::Themes::Monokai);
     ui->themeComboBox->addItem("debug", QSourceHighliter::Themes::Monokai);
     ui->themeComboBox->addItem("DarkTheme", QSourceHighliter::Themes::DarkTheme);
@@ -149,27 +148,9 @@ void MainWindow::initLangsComboBox() {
 }
 
 void MainWindow::themeChanged(int) {
-//    QSourceHighliter::Themes theme = (QSourceHighliter::Themes)ui->themeComboBox->currentData().toInt();
-//    highlighter->setTheme(theme);
-//    applyEditorBackground(theme);
     QSourceHighliter::Themes theme = (QSourceHighliter::Themes)ui->themeComboBox->currentData().toInt();
-
-        if (theme == QSourceHighliter::Themes::Default) {
-            if (highlighter) {
-                delete highlighter;
-                highlighter = nullptr;
-            }
-            // Сбрасываем стиль фона и текста редактора к стандартному Qt
-            ui->plainTextEdit->setStyleSheet("");
-            ui->plainTextEdit->setFont(QFontDatabase::systemFont(QFontDatabase::FixedFont));
-        } else {
-            // Создаем подсветчик, если он отсутствует
-            if (!highlighter) {
-                highlighter = new QSourceHighliter(ui->plainTextEdit->document());
-            }
-            highlighter->setTheme(theme);
-            applyEditorBackground(theme);
-        }
+    highlighter->setTheme(theme);
+    applyEditorBackground(theme);
 }
 
 void MainWindow::applyEditorBackground(QSourceHighliter::Themes theme) {
