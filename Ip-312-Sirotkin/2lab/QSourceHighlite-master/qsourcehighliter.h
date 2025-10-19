@@ -36,6 +36,7 @@ class QSourceHighliter : public QSyntaxHighlighter
 {
 public:
     enum Themes {
+        Default = 0,
         Monokai = 1,
         DarkTheme = 2,
         LightTheme = 3,
