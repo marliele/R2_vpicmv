@@ -1,0 +1,11 @@
+release/qsourcehighliter.o
+release/languagedata.o
+release/qsourcehighliterthemes.o
+release/customthemedialog.o
+release/main.o
+release/mainwindow.o
+release/searchdialog.o
+release/qrc_icons.o
+release/moc_customthemedialog.o
+release/moc_mainwindow.o
+release/moc_searchdialog.o

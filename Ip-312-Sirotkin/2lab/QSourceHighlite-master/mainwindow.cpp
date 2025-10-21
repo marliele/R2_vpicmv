@@ -272,6 +272,7 @@ void MainWindow::on_actionJSON_triggered()
 
     QJsonObject root;
     root["language"] = ui->langComboBox->currentText();
+    root["theme"] = ui->themeComboBox->currentIndex();
     root["text"] = ui->plainTextEdit->toPlainText();
 
     QJsonDocument doc(root);
@@ -318,12 +319,18 @@ void MainWindow::on_actionJSON_opener(){
           }
       }
 
+      if (root.contains("theme")){
+          int indexofjsonopen = root["theme"].toInt();
+          themeChanged(indexofjsonopen);
+          ui->themeComboBox->setCurrentIndex(indexofjsonopen);
+      }
+
       if (root.contains("text") && root["text"].isString()) {
           QString text = root["text"].toString();
           ui->plainTextEdit->setPlainText(text);
       }
 
-      ui->statusbar->showMessage("Загружен файл " + fileName, 3000); return;
+//      ui->statusbar->showMessage("Загружен файл " + fileName, 3000); return;
     }
 
 void MainWindow::on_actionTXT_opener(){

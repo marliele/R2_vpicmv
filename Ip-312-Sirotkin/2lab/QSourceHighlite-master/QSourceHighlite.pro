@@ -8,15 +8,18 @@ CONFIG += c++11
 DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
+    customthemedialog.cpp \
     main.cpp \
     mainwindow.cpp \ 
     searchdialog.cpp
 
 HEADERS += \
+    customthemedialog.h \
     mainwindow.h \ 
     searchdialog.h
 
 FORMS += \
+    customthemedialog.ui \
     mainwindow.ui \
     searchdialog.ui
 
