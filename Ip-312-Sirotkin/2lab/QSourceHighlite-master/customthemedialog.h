@@ -20,7 +20,7 @@ public:
 
     struct CustomTheme {
         QString name;
-        QHash<QSourceHighlite::Token, QColor> colors;
+        QHash<QSourceHighlite::QSourceHighliter::Token, QColor> colors;
         QColor editorBackground;
     };
 
@@ -36,7 +36,7 @@ private slots:
 private:
     Ui::CustomThemeDialog *ui;
     CustomTheme currentTheme;
-    QHash<QSourceHighlite::Token, QColor> defaultColors;
+    QHash<QSourceHighlite::QSourceHighliter::Token, QColor> defaultColors;
 
     void setupTokenComboBox();
     void loadDefaultColors();

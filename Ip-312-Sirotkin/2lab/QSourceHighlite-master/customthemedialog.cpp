@@ -1,7 +1,8 @@
 #include "customthemedialog.h"
 #include "ui_customthemedialog.h"
 
-customthemedialog::customthemedialog(QWidget *parent) :
+/*
+ * CustomThemeDialog::customthemedialog(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::customthemedialog)
 {
@@ -12,3 +13,4 @@ customthemedialog::~customthemedialog()
 {
     delete ui;
 }
+*/
