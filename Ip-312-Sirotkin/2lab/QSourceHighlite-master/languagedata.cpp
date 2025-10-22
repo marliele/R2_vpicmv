@@ -198,7 +198,6 @@ void initCppData() {
     {('d'), QLatin1String("delete")},
     {('d'), QLatin1String("do")},
     {('d'), QLatin1String("dynamic_cast")},
-    {('e'), QLatin1String("else")},
     {('e'), QLatin1String("explicit")},
     {('e'), QLatin1String("export")},
     {('e'), QLatin1String("extern")},
