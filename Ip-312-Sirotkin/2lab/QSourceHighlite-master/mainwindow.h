@@ -39,6 +39,7 @@
 #include <QLineEdit>
 #include "searchdialog.h"
 #include "qsourcehighliterthemes.h"
+#include <QProcess>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -57,6 +58,9 @@ private:
     Ui::MainWindow *ui;
     QSourceHighlite::QSourceHighliter *highlighter;
     static QHash<QString, QSourceHighlite::QSourceHighliter::Language> _langStringToEnum;
+
+    QProcess *process;
+    QTemporaryFile *tempScriptFile;
 
     /* FUNCTIONS */
     void closeEvent(QCloseEvent *event);
@@ -77,6 +81,12 @@ private slots:
     void onReplaceAll(const QString &find, const QString &replace);
 
     void on_action_11_triggered();
+
+
+    void RunScriptClicked();
+
+    void onProcessReadyReadStandardOutput();
+    void onProcessReadyReadStandardError();
 
 
 private slots:

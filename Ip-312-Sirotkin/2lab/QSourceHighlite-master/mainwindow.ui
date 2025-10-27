@@ -61,7 +61,7 @@
         <widget class="QComboBox" name="themeComboBox"/>
        </item>
        <item row="4" column="0">
-        <widget class="QPushButton" name="ButtonExecute">
+        <widget class="QPushButton" name="buttonExecute">
          <property name="text">
           <string>Выполнить</string>
          </property>

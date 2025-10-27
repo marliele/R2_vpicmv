@@ -21,6 +21,7 @@
 #include <QtWidgets/QMenu>
 #include <QtWidgets/QMenuBar>
 #include <QtWidgets/QPlainTextEdit>
+#include <QtWidgets/QPushButton>
 #include <QtWidgets/QStatusBar>
 #include <QtWidgets/QToolBar>
 #include <QtWidgets/QWidget>
@@ -50,7 +51,9 @@ public:
     QComboBox *langComboBox;
     QLabel *label_2;
     QComboBox *themeComboBox;
+    QPushButton *buttonExecute;
     QPlainTextEdit *plainTextEdit;
+    QPlainTextEdit *plainTextEdOutput;
     QMenuBar *menubar;
     QMenu *menu;
     QMenu *menu_2;
@@ -158,6 +161,11 @@ public:
 
         formLayout->setWidget(3, QFormLayout::LabelRole, themeComboBox);
 
+        buttonExecute = new QPushButton(groupBox);
+        buttonExecute->setObjectName(QString::fromUtf8("buttonExecute"));
+
+        formLayout->setWidget(4, QFormLayout::LabelRole, buttonExecute);
+
 
         horizontalLayout->addWidget(groupBox);
 
@@ -165,6 +173,11 @@ public:
         plainTextEdit->setObjectName(QString::fromUtf8("plainTextEdit"));
 
         horizontalLayout->addWidget(plainTextEdit);
+
+        plainTextEdOutput = new QPlainTextEdit(centralwidget);
+        plainTextEdOutput->setObjectName(QString::fromUtf8("plainTextEdOutput"));
+
+        horizontalLayout->addWidget(plainTextEdOutput);
 
         MainWindow->setCentralWidget(centralwidget);
         menubar = new QMenuBar(MainWindow);
@@ -241,6 +254,7 @@ public:
         label->setText(QApplication::translate("MainWindow", "Language:", nullptr));
         langComboBox->setCurrentText(QString());
         label_2->setText(QApplication::translate("MainWindow", "Theme", nullptr));
+        buttonExecute->setText(QApplication::translate("MainWindow", "\320\222\321\213\320\277\320\276\320\273\320\275\320\270\321\202\321\214", nullptr));
         menu->setTitle(QApplication::translate("MainWindow", "\320\244\320\260\320\271\320\273", nullptr));
         menu_2->setTitle(QApplication::translate("MainWindow", "\320\241\320\276\321\205\321\200\320\260\320\275\320\270\321\202\321\214 \320\272\320\260\320\272...", nullptr));
         menu_3->setTitle(QApplication::translate("MainWindow", "\320\236\321\202\320\272\321\200\321\213\321\202\321\214 \320\272\320\260\320\272...", nullptr));

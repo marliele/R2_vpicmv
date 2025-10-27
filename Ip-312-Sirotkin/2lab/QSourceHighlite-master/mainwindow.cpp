@@ -27,6 +27,7 @@
 #include "searchdialog.h"
 #include <QDebug>
 #include <QDir>
+#include <QTemporaryFile>
 
 QString lastfilepath ;
 QString lastsufix="";
@@ -40,6 +41,8 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    process = new QProcess(this);
+    tempScriptFile = nullptr;
 
     initLangsEnum();
     initLangsComboBox();
@@ -68,10 +71,97 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->actionTXT, &QAction::triggered,this, &MainWindow::on_actionTXT_opener);
     connect(ui->action_4, &QAction::triggered,this, &MainWindow::on_actionExit_triggered);
     connect(ui->action_11, &QAction::triggered, this, &MainWindow::on_action_11_triggered);
+
+    connect(process, &QProcess::readyReadStandardOutput, this, &MainWindow::onProcessReadyReadStandardOutput);
+    connect(process, &QProcess::readyReadStandardError, this, &MainWindow::onProcessReadyReadStandardError);
+    connect(ui->buttonExecute, &QPushButton::clicked, this, &MainWindow::RunScriptClicked);
 }
 
 MainWindow::~MainWindow()
 {
+}
+
+void MainWindow::RunScriptClicked()
+{
+    if(ui->langComboBox->currentText() != "Python")
+    {
+        QMessageBox::information(this, "Внимание", "Выполнение доступно только для Python.");
+        return;
+    }
+
+    QString code = ui->plainTextEdit->toPlainText();
+    if(code.isEmpty())
+    {
+        QMessageBox::warning(this, "Внимание", "Поле кода редактора пусто.");
+        return;
+    }
+
+    QTemporaryFile tempFile(QDir::tempPath() + "/scriptXXXXXX.py");
+    if(!tempFile.open())
+    {
+        QMessageBox::critical(this, "Ошибка", "Не удалось создать временный файл для скрипта");
+        return;
+    }
+
+
+
+    QTextStream out(&tempFile);
+    out << code;
+    out.flush();
+    tempFile.close();
+
+    QProcess process;
+    process.start("python", QStringList() << tempFile.fileName());
+
+    if (!process.waitForStarted())
+    {
+        QMessageBox::critical(this, "Ошибка", "Python не установлен или не найден в PATH");
+        return;
+    }
+
+
+    // Ждем выполнения процесса максимум 3 секунды
+    bool finished = process.waitForFinished(3000);
+    ui->statusbar->showMessage("Идет процесс компиляции...", 2000);
+    // Считываем вывод и ошибки
+    QString output = process.readAllStandardOutput();
+    QString error = process.readAllStandardError();
+
+    ui->plainTextEdOutput->clear();
+    if (!output.isEmpty())
+    {
+        ui->plainTextEdOutput->appendPlainText(output);
+    }
+    if (!error.isEmpty())
+    {
+        ui->plainTextEdOutput->appendPlainText(error);
+        finished = false;
+    }
+
+
+    if(!finished)
+    {
+        process.kill();
+        process.waitForFinished(-1);
+        ui->plainTextEdOutput->appendPlainText("Процесс аварийно завершился.");
+
+    }
+    else
+    {
+        ui->plainTextEdOutput->appendPlainText("Выполнение завершено.");
+    }
+}
+
+void MainWindow::onProcessReadyReadStandardOutput()
+{
+    QByteArray output = process->readAllStandardOutput();
+    ui->plainTextEdOutput->appendPlainText(QString::fromUtf8(output));
+}
+
+void MainWindow::onProcessReadyReadStandardError()
+{
+    QByteArray errorOutput = process->readAllStandardError();
+    ui->plainTextEdOutput->appendPlainText(QString::fromUtf8(errorOutput));
 }
 
 
