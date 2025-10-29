@@ -41,8 +41,9 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    process = new QProcess(this);
-    tempScriptFile = nullptr;
+    workerThread = new QThread(this);
+    worker = new ProcessWorker();
+    worker->moveToThread(workerThread);
 
     initLangsEnum();
     initLangsComboBox();
@@ -72,9 +73,15 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->action_4, &QAction::triggered,this, &MainWindow::on_actionExit_triggered);
     connect(ui->action_11, &QAction::triggered, this, &MainWindow::on_action_11_triggered);
 
-    connect(process, &QProcess::readyReadStandardOutput, this, &MainWindow::onProcessReadyReadStandardOutput);
-    connect(process, &QProcess::readyReadStandardError, this, &MainWindow::onProcessReadyReadStandardError);
-    connect(ui->buttonExecute, &QPushButton::clicked, this, &MainWindow::RunScriptClicked);
+
+    connect(workerThread, &QThread::finished, worker, &QObject::deleteLater);
+    connect(this, &MainWindow::startScript, worker, &ProcessWorker::run);
+    connect(this, &MainWindow::stopScript, worker, &ProcessWorker::stop);
+
+    connect(worker, &ProcessWorker::outputReady, this, &MainWindow::appendOutput);
+    connect(worker, &ProcessWorker::errorReady, this, &MainWindow::appendOutput);
+    connect(worker, &ProcessWorker::finished, this, &MainWindow::processFinished);
+    connect(worker, &ProcessWorker::error, this, &MainWindow::showError);
 }
 
 MainWindow::~MainWindow()
@@ -96,72 +103,53 @@ void MainWindow::RunScriptClicked()
         return;
     }
 
-    QTemporaryFile tempFile(QDir::tempPath() + "/scriptXXXXXX.py");
-    if(!tempFile.open())
+    if(tempScriptFile) {
+        tempScriptFile->remove();
+        delete tempScriptFile;
+    }
+
+    tempScriptFile = new QTemporaryFile(QDir::tempPath() + "/scriptXXXXXX.py");
+    if(!tempScriptFile->open())
     {
         QMessageBox::critical(this, "Ошибка", "Не удалось создать временный файл для скрипта");
         return;
     }
 
-
-
-    QTextStream out(&tempFile);
+    QTextStream out(tempScriptFile);
     out << code;
     out.flush();
-    tempFile.close();
-
-    QProcess process;
-    process.start("python", QStringList() << tempFile.fileName());
-
-    if (!process.waitForStarted())
-    {
-        QMessageBox::critical(this, "Ошибка", "Python не установлен или не найден в PATH");
-        return;
-    }
-
-
-    // Ждем выполнения процесса максимум 3 секунды
-    bool finished = process.waitForFinished(3000);
-    ui->statusbar->showMessage("Идет процесс компиляции...", 2000);
-    // Считываем вывод и ошибки
-    QString output = process.readAllStandardOutput();
-    QString error = process.readAllStandardError();
+    tempScriptFile->close();
 
     ui->plainTextEdOutput->clear();
-    if (!output.isEmpty())
-    {
-        ui->plainTextEdOutput->appendPlainText(output);
-    }
-    if (!error.isEmpty())
-    {
-        ui->plainTextEdOutput->appendPlainText(error);
-        finished = false;
-    }
+    ui->statusbar->showMessage("Запуск скрипта...");
 
+    emit startScript(tempScriptFile->fileName());
+}
 
-    if(!finished)
-    {
-        process.kill();
-        process.waitForFinished(-1);
-        ui->plainTextEdOutput->appendPlainText("Процесс аварийно завершился.");
+void MainWindow::KillScriptClicked()
+{
+    emit stopScript();
+}
 
-    }
-    else
-    {
+void MainWindow::appendOutput(const QString &text)
+{
+    ui->plainTextEdOutput->appendPlainText(text);
+}
+
+void MainWindow::processFinished(int exitCode, QProcess::ExitStatus exitStatus)
+{
+    Q_UNUSED(exitCode)
+    if(exitStatus == QProcess::NormalExit)
         ui->plainTextEdOutput->appendPlainText("Выполнение завершено.");
-    }
+    else
+        ui->plainTextEdOutput->appendPlainText("Процесс аварийно завершён.");
+    ui->statusbar->showMessage("Готов.", 3000);
 }
 
-void MainWindow::onProcessReadyReadStandardOutput()
+void MainWindow::showError(const QString &errorString)
 {
-    QByteArray output = process->readAllStandardOutput();
-    ui->plainTextEdOutput->appendPlainText(QString::fromUtf8(output));
-}
-
-void MainWindow::onProcessReadyReadStandardError()
-{
-    QByteArray errorOutput = process->readAllStandardError();
-    ui->plainTextEdOutput->appendPlainText(QString::fromUtf8(errorOutput));
+    QMessageBox::critical(this, "Ошибка выполнения", errorString);
+    ui->statusbar->clearMessage();
 }
 
 

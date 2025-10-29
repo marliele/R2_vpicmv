@@ -40,6 +40,8 @@
 #include "searchdialog.h"
 #include "qsourcehighliterthemes.h"
 #include <QProcess>
+#include <QThread>
+#include "processworker.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -59,7 +61,8 @@ private:
     QSourceHighlite::QSourceHighliter *highlighter;
     static QHash<QString, QSourceHighlite::QSourceHighliter::Language> _langStringToEnum;
 
-    QProcess *process;
+    QThread *workerThread;
+    ProcessWorker *worker;
     QTemporaryFile *tempScriptFile;
 
     /* FUNCTIONS */
@@ -84,7 +87,7 @@ private slots:
 
 
     void RunScriptClicked();
-
+    void KillScriptClicked();
     void onProcessReadyReadStandardOutput();
     void onProcessReadyReadStandardError();
 
@@ -92,6 +95,14 @@ private slots:
 private slots:
     void themeChanged(int);
     void languageChanged(const QString &lang);
+
+    void processFinished(int exitCode, QProcess::ExitStatus exitStatus);
+    void appendOutput(const QString &text);
+    void showError(const QString &errorString);
+
+signals:
+    void startScript(const QString &scriptPath);
+    void stopScript();
 
 };
 

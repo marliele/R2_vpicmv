@@ -1,0 +1,12 @@
+debug/qsourcehighliter.o
+debug/languagedata.o
+debug/qsourcehighliterthemes.o
+debug/customthemedialog.o
+debug/main.o
+debug/mainwindow.o
+debug/processworker.o
+debug/searchdialog.o
+debug/qrc_icons.o
+debug/moc_mainwindow.o
+debug/moc_processworker.o
+debug/moc_searchdialog.o

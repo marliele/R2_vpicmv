@@ -10,12 +10,14 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
     customthemedialog.cpp \
     main.cpp \
-    mainwindow.cpp \ 
+    mainwindow.cpp \
+    processworker.cpp \
     searchdialog.cpp
 
 HEADERS += \
     customthemedialog.h \
-    mainwindow.h \ 
+    mainwindow.h \
+    processworker.h \
     searchdialog.h
 
 FORMS += \

@@ -52,6 +52,7 @@ public:
     QLabel *label_2;
     QComboBox *themeComboBox;
     QPushButton *buttonExecute;
+    QPushButton *buttonStop;
     QPlainTextEdit *plainTextEdit;
     QPlainTextEdit *plainTextEdOutput;
     QMenuBar *menubar;
@@ -166,6 +167,11 @@ public:
 
         formLayout->setWidget(4, QFormLayout::LabelRole, buttonExecute);
 
+        buttonStop = new QPushButton(groupBox);
+        buttonStop->setObjectName(QString::fromUtf8("buttonStop"));
+
+        formLayout->setWidget(5, QFormLayout::LabelRole, buttonStop);
+
 
         horizontalLayout->addWidget(groupBox);
 
@@ -255,6 +261,7 @@ public:
         langComboBox->setCurrentText(QString());
         label_2->setText(QApplication::translate("MainWindow", "Theme", nullptr));
         buttonExecute->setText(QApplication::translate("MainWindow", "\320\222\321\213\320\277\320\276\320\273\320\275\320\270\321\202\321\214", nullptr));
+        buttonStop->setText(QApplication::translate("MainWindow", "\320\241\321\202\320\276\320\277", nullptr));
         menu->setTitle(QApplication::translate("MainWindow", "\320\244\320\260\320\271\320\273", nullptr));
         menu_2->setTitle(QApplication::translate("MainWindow", "\320\241\320\276\321\205\321\200\320\260\320\275\320\270\321\202\321\214 \320\272\320\260\320\272...", nullptr));
         menu_3->setTitle(QApplication::translate("MainWindow", "\320\236\321\202\320\272\321\200\321\213\321\202\321\214 \320\272\320\260\320\272...", nullptr));
