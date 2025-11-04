@@ -64,7 +64,6 @@ MainWindow::MainWindow(QWidget *parent)
             static_cast<void (QComboBox::*) (int)>(&QComboBox::currentIndexChanged),
             this, &MainWindow::themeChanged);
 
-    //    connect(ui->plainTextEdit, &QPlainTextEdit::textChanged, this, &MainWindow::printDebug);
     connect(ui->action_3, &QAction::triggered,this, &MainWindow::on_actionTXT_triggered);
     connect(ui->actionJson, &QAction::triggered,this, &MainWindow::on_actionJSON_triggered);
     connect(ui->actionJson_2, &QAction::triggered,this, &MainWindow::on_actionJSON_opener);
@@ -78,6 +77,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(process, &QProcess::readyReadStandardOutput, this, &MainWindow::onProcessReadyReadStandardOutput);
     connect(process, &QProcess::readyReadStandardError, this, &MainWindow::onProcessReadyReadStandardError);
     connect(ui->buttonExecute, &QPushButton::clicked, this, &MainWindow::RunScriptClicked);
+    ui->buttonStop->hide();
 }
 
 
@@ -88,6 +88,7 @@ MainWindow::~MainWindow()
 void MainWindow::RunScriptClicked()
 {
     ui->plainTextEdOutput->clear();
+    ui->buttonStop->show();
     if(ui->langComboBox->currentText() != "Python")
     {
         QMessageBox::information(this, "Внимание", "Выполнение доступно только для Python.");
@@ -161,6 +162,7 @@ void MainWindow::ProcessFinished(int exitCode, QProcess::ExitStatus exitStatus)
         delete tempScriptFile;
         tempScriptFile = nullptr;
     }
+    ui->buttonStop->hide();
     ui->statusbar->clearMessage();
 }
 
