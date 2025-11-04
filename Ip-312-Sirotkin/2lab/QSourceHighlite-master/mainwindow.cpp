@@ -72,10 +72,14 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->action_4, &QAction::triggered,this, &MainWindow::on_actionExit_triggered);
     connect(ui->action_11, &QAction::triggered, this, &MainWindow::on_action_11_triggered);
 
+
+    connect(ui->buttonStop, &QPushButton::clicked, this, &MainWindow::StopScriptClicked);
+    connect(process, QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished), this, &MainWindow::ProcessFinished);
     connect(process, &QProcess::readyReadStandardOutput, this, &MainWindow::onProcessReadyReadStandardOutput);
     connect(process, &QProcess::readyReadStandardError, this, &MainWindow::onProcessReadyReadStandardError);
     connect(ui->buttonExecute, &QPushButton::clicked, this, &MainWindow::RunScriptClicked);
 }
+
 
 MainWindow::~MainWindow()
 {
@@ -83,6 +87,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::RunScriptClicked()
 {
+    ui->plainTextEdOutput->clear();
     if(ui->langComboBox->currentText() != "Python")
     {
         QMessageBox::information(this, "Внимание", "Выполнение доступно только для Python.");
@@ -96,8 +101,12 @@ void MainWindow::RunScriptClicked()
         return;
     }
 
-    QTemporaryFile tempFile(QDir::tempPath() + "/scriptXXXXXX.py");
-    if(!tempFile.open())
+    if(tempScriptFile)
+    {
+        delete tempScriptFile;
+    }
+    tempScriptFile = new QTemporaryFile(QDir::tempPath() + "/scriptXXXXXX.py", this);
+    if(!tempScriptFile->open())
     {
         QMessageBox::critical(this, "Ошибка", "Не удалось создать временный файл для скрипта");
         return;
@@ -105,51 +114,54 @@ void MainWindow::RunScriptClicked()
 
 
 
-    QTextStream out(&tempFile);
+    QTextStream out(tempScriptFile);
     out << code;
     out.flush();
-    tempFile.close();
+    tempScriptFile->close();
 
-    QProcess process;
-    process.start("python", QStringList() << tempFile.fileName());
+    process->start("python", QStringList() << tempScriptFile->fileName());
 
-    if (!process.waitForStarted())
+    if (!process->waitForStarted())
     {
         QMessageBox::critical(this, "Ошибка", "Python не установлен или не найден в PATH");
         return;
     }
 
 
-    // Ждем выполнения процесса максимум 3 секунды
-    bool finished = process.waitForFinished(3000);
-    ui->statusbar->showMessage("Идет процесс компиляции...", 2000);
-    // Считываем вывод и ошибки
-    QString output = process.readAllStandardOutput();
-    QString error = process.readAllStandardError();
+    ui->statusbar->showMessage("Выполнение скрипта...", 0);
+}
 
-    ui->plainTextEdOutput->clear();
-    if (!output.isEmpty())
+void MainWindow::StopScriptClicked()
+{
+    if(process->state() == QProcess::Running)
     {
-        ui->plainTextEdOutput->appendPlainText(output);
+        process->kill();
+        ui->statusbar->showMessage("Процесс остановлен пользователем");
     }
-    if (!error.isEmpty())
-    {
-        ui->plainTextEdOutput->appendPlainText(error);
-        finished = false;
-    }
+}
 
-
-    if(!finished)
+void MainWindow::ProcessFinished(int exitCode, QProcess::ExitStatus exitStatus)
+{
+    Q_UNUSED(exitCode)
+    if(exitStatus == QProcess::CrashExit)
     {
-        process.kill();
-        process.waitForFinished(-1);
         ui->plainTextEdOutput->appendPlainText("Процесс аварийно завершился.");
-
+    }
+    else if(exitCode != 0)
+    {
+        ui->plainTextEdOutput->appendPlainText(QString("Скрипт завершился с ошибкой (код %1).").arg(exitCode));
     }
     else
     {
         ui->plainTextEdOutput->appendPlainText("Выполнение завершено.");
     }
+    if(tempScriptFile)
+    {
+        tempScriptFile->remove();
+        delete tempScriptFile;
+        tempScriptFile = nullptr;
+    }
+    ui->statusbar->clearMessage();
 }
 
 void MainWindow::onProcessReadyReadStandardOutput()

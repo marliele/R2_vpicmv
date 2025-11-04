@@ -84,9 +84,10 @@ private slots:
 
 
     void RunScriptClicked();
-
+    void StopScriptClicked();
     void onProcessReadyReadStandardOutput();
     void onProcessReadyReadStandardError();
+    void ProcessFinished(int exitCode, QProcess::ExitStatus exitStatus);
 
 
 private slots:
