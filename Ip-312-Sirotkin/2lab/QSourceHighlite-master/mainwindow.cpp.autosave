@@ -117,7 +117,7 @@ void MainWindow::RunScriptClicked()
     }
 
     QTextStream out(tempScriptFile);
-    out << code;
+    out << code;p
     out.flush();
     tempScriptFile->close();
 
