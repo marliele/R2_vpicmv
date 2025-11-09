@@ -164,3 +164,45 @@ void DocumentWidget::renameFilename()
 
     setUrl(newUrl);
 }
+
+void TableDocument::showTableContextMenu(QTableWidget *table, const QPoint &pos)
+{
+    QMenu menu;
+
+    QAction *actionAddRow = menu.addAction(tr("Add Row"));
+    QAction *actionRemoveRow = menu.addAction(tr("Remove Last Row"));
+    QAction *actionAddColumn = menu.addAction(tr("Add Column"));
+    QAction *actionRemoveColumn = menu.addAction(tr("Remove Last Column"));
+
+    QAction *selectedAction = menu.exec(table->mapToGlobal(pos));
+
+    if (!selectedAction)
+    {
+        return;
+    }
+
+    if (selectedAction == actionAddRow)
+    {
+        table->setRowCount(table->rowCount()+1);
+        emit contentChanged(true);
+    }
+    else if (selectedAction == actionRemoveRow && table->rowCount() > 0)
+    {
+        table->setRowCount(table->rowCount()-1);
+        emit contentChanged(true);
+    }
+    else if (selectedAction == actionAddColumn)
+    {
+        int newColIndex = table->columnCount();
+        table->setColumnCount(newColIndex+1);
+        table->setHorizontalHeaderItem(newColIndex, new QTableWidgetItem(QString("Column %1").arg(newColIndex+1)));
+        emit contentChanged(true);
+    }
+    else if (selectedAction == actionRemoveColumn && table->columnCount()>0)
+    {
+        int colCount = table->columnCount();
+        table->setColumnCount(colCount-1);
+        emit contentChanged(true);
+    }
+}
+

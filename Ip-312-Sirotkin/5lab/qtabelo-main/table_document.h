@@ -50,6 +50,7 @@ signals:
     void tabBarVisibleChanged(const bool visible);
     void tabBarPositionChanged(const QTabWidget::TabPosition position);
     void tabBarAutoHideChanged(const bool enabled);
+    void contentChanged(bool modified);
 
 public slots:
     void showTableContextMenu(QTableWidget *table, const QPoint &pos);
@@ -64,8 +65,6 @@ public slots:
     void setTabBarAutoHide(const bool enabled);
     void resetTabBarAutoHide();
     void initTabBarAutoHide();
-
-//    void contentChanged(bool mode);
 
 protected slots:
     void slotAddTab(const int count);

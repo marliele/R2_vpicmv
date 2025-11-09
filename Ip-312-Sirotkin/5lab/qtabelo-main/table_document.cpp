@@ -198,31 +198,35 @@ void TableDocument::initTabBarAutoHide()
 
 void TableDocument::slotAddTab(const int count)
 {
-    if (m_tabs->count() == 0) {
-        for (int i = 0; i < count; ++i) {
-        QTableWidget* table = new QTableWidget(15, 5);
-        table->setObjectName(QStringLiteral("Sheet%1").arg(i+1));
+    if (m_tabs->count() == 0)
+    {
+        for (int i = 0; i < count; ++i)
+        {
+            QTableWidget* table = new QTableWidget(15, 5);
+            table->setObjectName(QStringLiteral("Sheet%1").arg(i+1));
 
-        QStringList headers;
-        for (int col = 0; col < 5; ++col) {
-            headers << QString("Column %1").arg(col + 1);
-        }
-        table->setHorizontalHeaderLabels(headers);
-
-        table->setContextMenuPolicy(Qt::CustomContextMenu);
-
-        connect(table, &QTableWidget::customContextMenuRequested,
-                this, [this, table](const QPoint &pos) {
-            showTableContextMenu(table, pos);
-        });
-        connect(table, &QTableWidget::itemChanged,
-                this, [this](QTableWidgetItem*) {
-            DocumentWidget *doc = qobject_cast<DocumentWidget*>(this->parent());
-            if (doc){
-                doc->setModified(true);
+            QStringList headers;
+            for (int col = 0; col < 5; ++col)
+            {
+                headers << QString("Column %1").arg(col + 1);
             }
-        });
-        m_tabs->addTab(table, tr("Sheet %1").arg(i + 1));
+            table->setHorizontalHeaderLabels(headers);
+
+            table->setContextMenuPolicy(Qt::CustomContextMenu);
+
+            connect(table, &QTableWidget::customContextMenuRequested, this, [this, table](const QPoint &pos)
+            {
+                showTableContextMenu(table, pos);
+            });
+            connect(table, &QTableWidget::itemChanged, this, [this](QTableWidgetItem*)
+            {
+                DocumentWidget *doc = qobject_cast<DocumentWidget*>(this->parent());
+                if (doc)
+                {
+                    doc->setModified(true);
+                }
+            });
+            m_tabs->addTab(table, tr("Sheet %1").arg(i + 1));
         }
     }
 }
@@ -240,38 +244,3 @@ void TableDocument::slotCloseTab(const int index) {
     }
 }
 
-//void TableDocument::contentChanged(bool mode){
-//    DocumentWidget::setModified(mode);
-//}
-
-void TableDocument::showTableContextMenu(QTableWidget *table, const QPoint &pos){
-    QMenu menu;
-
-    QAction *actionAddRow = menu.addAction(tr("Add Row"));
-    QAction *actionRemoveRow = menu.addAction(tr("Remove Last Row"));
-    QAction *actionAddColumn = menu.addAction(tr("Add Column"));
-    QAction *actionRemoveColumn = menu.addAction(tr("Remove Last Row"));
-
-    QAction *selectedAction = menu.exec(table->mapToGlobal(pos));
-
-    if (!selectedAction){
-        return;
-    }
-
-    if (selectedAction == actionAddRow){
-        table->setRowCount(table->rowCount()+1);
-        emit contentChanged(true);
-    } else if (selectedAction == actionRemoveRow && table->rowCount() > 0){
-        table->setRowCount(table->rowCount()-1);
-        emit contentChanged(true);
-    } else if (selectedAction == actionAddColumn){
-        int newColIndex = table->columnCount();
-        table->setColumnCount(newColIndex+1);
-        table->setHorizontalHeaderItem(newColIndex, new QTableWidgetItem(QString("Column %1").arg(newColIndex+1)));
-        emit contentChanged(true);
-    } else if (selectedAction == actionRemoveColumn && table->columnCount()>0){
-        int colCount = table->columnCount();
-        table->setColumnCount(colCount-1);
-        emit contentChanged(true);
-    }
-}
