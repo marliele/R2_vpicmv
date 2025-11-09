@@ -244,3 +244,58 @@ void TableDocument::slotCloseTab(const int index) {
     }
 }
 
+void TableDocument::deleteSelectedRowsAndColumns(QTableWidget *table)
+{
+    QList<QTableWidgetSelectionRange> ranges = table->selectedRanges();
+
+    QList<int> rowsToDelete;
+    QList<int> colsToDelete;
+
+    // Проходим по каждому выделенному диапазону
+    for(const auto &range : ranges)
+    {
+        // Перебираем строки с конца к началу диапазона
+        for(int row = range.bottomRow(); row >= range.topRow(); row--)
+        {
+            // Добавляем строку, если её еще нет в списке (чтобы избежать дублей)
+            if(!rowsToDelete.contains(row))
+            {
+                rowsToDelete.append(row);
+            }
+        }
+
+        // Перебираем столбцы с конца к началу диапазона
+        for(int col = range.rightColumn(); col >= range.leftColumn(); col--)
+        {
+            // Добавляем столбец, если его нет в списке
+            if(!colsToDelete.contains(col))
+            {
+                colsToDelete.append(col);
+            }
+        }
+    }
+
+    // Удаляем столбцы подряд (уже в нужном порядке c конца чтобы таблица не сдвигалась)
+    for(int col : colsToDelete)
+    {
+        if(col >= 0 && col < table->columnCount())
+        {
+            table->removeColumn(col);
+        }
+
+    }
+
+    // Удаляем строки(также как и для столбцов)
+    for(int row : rowsToDelete)
+    {
+        if(row >= 0 && row < table->rowCount())
+        {
+            table->removeRow(row);
+        }
+
+    }
+
+    emit contentChanged(true);
+}
+
+

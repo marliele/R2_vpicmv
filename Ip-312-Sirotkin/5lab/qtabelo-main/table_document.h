@@ -54,6 +54,7 @@ signals:
 
 public slots:
     void showTableContextMenu(QTableWidget *table, const QPoint &pos);
+    void deleteSelectedRowsAndColumns(QTableWidget *table);
     void setTabBarVisible(const bool visible);
     void resetTabBarVisible();
     void initTabBarVisible();

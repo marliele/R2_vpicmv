@@ -21,8 +21,8 @@ QT_BEGIN_MOC_NAMESPACE
 QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 struct qt_meta_stringdata_TableDocument_t {
-    QByteArrayData data[31];
-    char stringdata0[446];
+    QByteArrayData data[32];
+    char stringdata0[475];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -46,22 +46,23 @@ QT_MOC_LITERAL(11, 153, 20), // "showTableContextMenu"
 QT_MOC_LITERAL(12, 174, 13), // "QTableWidget*"
 QT_MOC_LITERAL(13, 188, 5), // "table"
 QT_MOC_LITERAL(14, 194, 3), // "pos"
-QT_MOC_LITERAL(15, 198, 16), // "setTabBarVisible"
-QT_MOC_LITERAL(16, 215, 18), // "resetTabBarVisible"
-QT_MOC_LITERAL(17, 234, 17), // "initTabBarVisible"
-QT_MOC_LITERAL(18, 252, 17), // "setTabBarPosition"
-QT_MOC_LITERAL(19, 270, 19), // "resetTabBarPosition"
-QT_MOC_LITERAL(20, 290, 18), // "initTabBarPosition"
-QT_MOC_LITERAL(21, 309, 17), // "setTabBarAutoHide"
-QT_MOC_LITERAL(22, 327, 19), // "resetTabBarAutoHide"
-QT_MOC_LITERAL(23, 347, 18), // "initTabBarAutoHide"
-QT_MOC_LITERAL(24, 366, 10), // "slotAddTab"
-QT_MOC_LITERAL(25, 377, 5), // "count"
-QT_MOC_LITERAL(26, 383, 12), // "slotCloseTab"
-QT_MOC_LITERAL(27, 396, 5), // "index"
-QT_MOC_LITERAL(28, 402, 13), // "tabBarVisible"
-QT_MOC_LITERAL(29, 416, 14), // "tabBarPosition"
-QT_MOC_LITERAL(30, 431, 14) // "tabBarAutoHide"
+QT_MOC_LITERAL(15, 198, 28), // "deleteSelectedRowsAndColumns"
+QT_MOC_LITERAL(16, 227, 16), // "setTabBarVisible"
+QT_MOC_LITERAL(17, 244, 18), // "resetTabBarVisible"
+QT_MOC_LITERAL(18, 263, 17), // "initTabBarVisible"
+QT_MOC_LITERAL(19, 281, 17), // "setTabBarPosition"
+QT_MOC_LITERAL(20, 299, 19), // "resetTabBarPosition"
+QT_MOC_LITERAL(21, 319, 18), // "initTabBarPosition"
+QT_MOC_LITERAL(22, 338, 17), // "setTabBarAutoHide"
+QT_MOC_LITERAL(23, 356, 19), // "resetTabBarAutoHide"
+QT_MOC_LITERAL(24, 376, 18), // "initTabBarAutoHide"
+QT_MOC_LITERAL(25, 395, 10), // "slotAddTab"
+QT_MOC_LITERAL(26, 406, 5), // "count"
+QT_MOC_LITERAL(27, 412, 12), // "slotCloseTab"
+QT_MOC_LITERAL(28, 425, 5), // "index"
+QT_MOC_LITERAL(29, 431, 13), // "tabBarVisible"
+QT_MOC_LITERAL(30, 445, 14), // "tabBarPosition"
+QT_MOC_LITERAL(31, 460, 14) // "tabBarAutoHide"
 
     },
     "TableDocument\0tabBarVisibleChanged\0\0"
@@ -69,14 +70,15 @@ QT_MOC_LITERAL(30, 431, 14) // "tabBarAutoHide"
     "QTabWidget::TabPosition\0position\0"
     "tabBarAutoHideChanged\0enabled\0"
     "contentChanged\0modified\0showTableContextMenu\0"
-    "QTableWidget*\0table\0pos\0setTabBarVisible\0"
-    "resetTabBarVisible\0initTabBarVisible\0"
-    "setTabBarPosition\0resetTabBarPosition\0"
-    "initTabBarPosition\0setTabBarAutoHide\0"
-    "resetTabBarAutoHide\0initTabBarAutoHide\0"
-    "slotAddTab\0count\0slotCloseTab\0index\0"
-    "tabBarVisible\0tabBarPosition\0"
-    "tabBarAutoHide"
+    "QTableWidget*\0table\0pos\0"
+    "deleteSelectedRowsAndColumns\0"
+    "setTabBarVisible\0resetTabBarVisible\0"
+    "initTabBarVisible\0setTabBarPosition\0"
+    "resetTabBarPosition\0initTabBarPosition\0"
+    "setTabBarAutoHide\0resetTabBarAutoHide\0"
+    "initTabBarAutoHide\0slotAddTab\0count\0"
+    "slotCloseTab\0index\0tabBarVisible\0"
+    "tabBarPosition\0tabBarAutoHide"
 };
 #undef QT_MOC_LITERAL
 
@@ -86,32 +88,33 @@ static const uint qt_meta_data_TableDocument[] = {
        8,       // revision
        0,       // classname
        0,    0, // classinfo
-      16,   14, // methods
-       3,  132, // properties
+      17,   14, // methods
+       3,  140, // properties
        0,    0, // enums/sets
        0,    0, // constructors
        0,       // flags
        4,       // signalCount
 
  // signals: name, argc, parameters, tag, flags
-       1,    1,   94,    2, 0x06 /* Public */,
-       4,    1,   97,    2, 0x06 /* Public */,
-       7,    1,  100,    2, 0x06 /* Public */,
-       9,    1,  103,    2, 0x06 /* Public */,
+       1,    1,   99,    2, 0x06 /* Public */,
+       4,    1,  102,    2, 0x06 /* Public */,
+       7,    1,  105,    2, 0x06 /* Public */,
+       9,    1,  108,    2, 0x06 /* Public */,
 
  // slots: name, argc, parameters, tag, flags
-      11,    2,  106,    2, 0x0a /* Public */,
-      15,    1,  111,    2, 0x0a /* Public */,
-      16,    0,  114,    2, 0x0a /* Public */,
-      17,    0,  115,    2, 0x0a /* Public */,
-      18,    1,  116,    2, 0x0a /* Public */,
-      19,    0,  119,    2, 0x0a /* Public */,
-      20,    0,  120,    2, 0x0a /* Public */,
-      21,    1,  121,    2, 0x0a /* Public */,
-      22,    0,  124,    2, 0x0a /* Public */,
-      23,    0,  125,    2, 0x0a /* Public */,
-      24,    1,  126,    2, 0x09 /* Protected */,
-      26,    1,  129,    2, 0x08 /* Private */,
+      11,    2,  111,    2, 0x0a /* Public */,
+      15,    1,  116,    2, 0x0a /* Public */,
+      16,    1,  119,    2, 0x0a /* Public */,
+      17,    0,  122,    2, 0x0a /* Public */,
+      18,    0,  123,    2, 0x0a /* Public */,
+      19,    1,  124,    2, 0x0a /* Public */,
+      20,    0,  127,    2, 0x0a /* Public */,
+      21,    0,  128,    2, 0x0a /* Public */,
+      22,    1,  129,    2, 0x0a /* Public */,
+      23,    0,  132,    2, 0x0a /* Public */,
+      24,    0,  133,    2, 0x0a /* Public */,
+      25,    1,  134,    2, 0x09 /* Protected */,
+      27,    1,  137,    2, 0x08 /* Private */,
 
  // signals: parameters
     QMetaType::Void, QMetaType::Bool,    3,
@@ -121,6 +124,7 @@ static const uint qt_meta_data_TableDocument[] = {
 
  // slots: parameters
     QMetaType::Void, 0x80000000 | 12, QMetaType::QPoint,   13,   14,
+    QMetaType::Void, 0x80000000 | 12,   13,
     QMetaType::Void, QMetaType::Bool,    3,
     QMetaType::Void,
     QMetaType::Void,
@@ -130,13 +134,13 @@ static const uint qt_meta_data_TableDocument[] = {
     QMetaType::Void, QMetaType::Bool,    8,
     QMetaType::Void,
     QMetaType::Void,
-    QMetaType::Void, QMetaType::Int,   25,
-    QMetaType::Void, QMetaType::Int,   27,
+    QMetaType::Void, QMetaType::Int,   26,
+    QMetaType::Void, QMetaType::Int,   28,
 
  // properties: name, type, flags
-      28, QMetaType::Bool, 0x00495107,
-      29, 0x80000000 | 5, 0x0049510f,
-      30, QMetaType::Bool, 0x00495107,
+      29, QMetaType::Bool, 0x00495107,
+      30, 0x80000000 | 5, 0x0049510f,
+      31, QMetaType::Bool, 0x00495107,
 
  // properties: notify_signal_id
        0,
@@ -157,23 +161,31 @@ void TableDocument::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _i
         case 2: _t->tabBarAutoHideChanged((*reinterpret_cast< const bool(*)>(_a[1]))); break;
         case 3: _t->contentChanged((*reinterpret_cast< bool(*)>(_a[1]))); break;
         case 4: _t->showTableContextMenu((*reinterpret_cast< QTableWidget*(*)>(_a[1])),(*reinterpret_cast< const QPoint(*)>(_a[2]))); break;
-        case 5: _t->setTabBarVisible((*reinterpret_cast< const bool(*)>(_a[1]))); break;
-        case 6: _t->resetTabBarVisible(); break;
-        case 7: _t->initTabBarVisible(); break;
-        case 8: _t->setTabBarPosition((*reinterpret_cast< const QTabWidget::TabPosition(*)>(_a[1]))); break;
-        case 9: _t->resetTabBarPosition(); break;
-        case 10: _t->initTabBarPosition(); break;
-        case 11: _t->setTabBarAutoHide((*reinterpret_cast< const bool(*)>(_a[1]))); break;
-        case 12: _t->resetTabBarAutoHide(); break;
-        case 13: _t->initTabBarAutoHide(); break;
-        case 14: _t->slotAddTab((*reinterpret_cast< const int(*)>(_a[1]))); break;
-        case 15: _t->slotCloseTab((*reinterpret_cast< const int(*)>(_a[1]))); break;
+        case 5: _t->deleteSelectedRowsAndColumns((*reinterpret_cast< QTableWidget*(*)>(_a[1]))); break;
+        case 6: _t->setTabBarVisible((*reinterpret_cast< const bool(*)>(_a[1]))); break;
+        case 7: _t->resetTabBarVisible(); break;
+        case 8: _t->initTabBarVisible(); break;
+        case 9: _t->setTabBarPosition((*reinterpret_cast< const QTabWidget::TabPosition(*)>(_a[1]))); break;
+        case 10: _t->resetTabBarPosition(); break;
+        case 11: _t->initTabBarPosition(); break;
+        case 12: _t->setTabBarAutoHide((*reinterpret_cast< const bool(*)>(_a[1]))); break;
+        case 13: _t->resetTabBarAutoHide(); break;
+        case 14: _t->initTabBarAutoHide(); break;
+        case 15: _t->slotAddTab((*reinterpret_cast< const int(*)>(_a[1]))); break;
+        case 16: _t->slotCloseTab((*reinterpret_cast< const int(*)>(_a[1]))); break;
         default: ;
         }
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
         switch (_id) {
         default: *reinterpret_cast<int*>(_a[0]) = -1; break;
         case 4:
+            switch (*reinterpret_cast<int*>(_a[1])) {
+            default: *reinterpret_cast<int*>(_a[0]) = -1; break;
+            case 0:
+                *reinterpret_cast<int*>(_a[0]) = qRegisterMetaType< QTableWidget* >(); break;
+            }
+            break;
+        case 5:
             switch (*reinterpret_cast<int*>(_a[1])) {
             default: *reinterpret_cast<int*>(_a[0]) = -1; break;
             case 0:
@@ -280,13 +292,13 @@ int TableDocument::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 16)
+        if (_id < 17)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 16;
+        _id -= 17;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 16)
+        if (_id < 17)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 16;
+        _id -= 17;
     }
 #ifndef QT_NO_PROPERTIES
    else if (_c == QMetaObject::ReadProperty || _c == QMetaObject::WriteProperty

@@ -173,6 +173,7 @@ void TableDocument::showTableContextMenu(QTableWidget *table, const QPoint &pos)
     QAction *actionRemoveRow = menu.addAction(tr("Remove Last Row"));
     QAction *actionAddColumn = menu.addAction(tr("Add Column"));
     QAction *actionRemoveColumn = menu.addAction(tr("Remove Last Column"));
+    QAction *actionRemoveSelected = menu.addAction(tr("Remove Selected Rows and Columns"));
 
     QAction *selectedAction = menu.exec(table->mapToGlobal(pos));
 
@@ -203,6 +204,10 @@ void TableDocument::showTableContextMenu(QTableWidget *table, const QPoint &pos)
         int colCount = table->columnCount();
         table->setColumnCount(colCount-1);
         emit contentChanged(true);
+    }
+    else if (selectedAction == actionRemoveSelected)
+    {
+        deleteSelectedRowsAndColumns(table);
     }
 }
 
